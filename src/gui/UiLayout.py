@@ -22,7 +22,6 @@ class UiLayout:
         self.__WINDOW.geometry("1000x700+500+300")
 
         self._component()
-
         figurePlt(self.__WINDOW)
 
         self.__WINDOW.mainloop()
@@ -68,7 +67,6 @@ class UiLayout:
             return True
         except ValueError:
             return False
-
 
     def _startCalcu(self):
         print(self.fileOptionValue.get())

@@ -1,4 +1,3 @@
-
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 # Implement the default Matplotlib key bindings.
@@ -10,12 +9,12 @@ import numpy as np
 
 class figurePlt():
     
-    # def __init__(self):
-
-
     def __init__(self, __WINDOW):
         self.__WINDOW = __WINDOW
-        
+        self.drawFigure()
+
+    def drawFigure(self):
+
         fig = plt.figure()
         ax = plt.axes()
 
@@ -40,3 +39,5 @@ class figurePlt():
         canvas.draw()
         canvas.get_tk_widget().grid(row = 4, column = 0, columnspan = 5, pady = (15, 15), padx = (25, 25))
         # , sticky=tk.N+tk.S+tk.E+tk.W
+
+    
