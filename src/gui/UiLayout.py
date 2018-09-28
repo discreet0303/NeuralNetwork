@@ -6,34 +6,27 @@ from matplotlib.backends.backend_tkagg import (
 # Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 import numpy as np
 
+from ..figure.figurePlt import figurePlt
 
-class GUI: 
+class UiLayout: 
 
     __WINDOW = tk.Tk()
 
     def __init__(self):
         self.__WINDOW.title("Neural Network HW_01")
         self.__WINDOW.resizable(0, 0)
-        self.__WINDOW.geometry("600x600+500+300")
+        self.__WINDOW.geometry("1000x700+500+300")
 
         self._component()
-        self.plt()
+
+        figurePlt(self.__WINDOW)
 
         self.__WINDOW.mainloop()
 
-    def plt(self):
-        fig = Figure(figsize=(2, 2), dpi=100)
-        t = np.arange(-3, 3, .01)
-        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
-
-        canvas = FigureCanvasTkAgg(fig, master=self.__WINDOW)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().grid(row = 4, column = 0, columnspan = 3, pady = (15, 15), padx = (25, 25))
-        # , sticky=tk.N+tk.S+tk.E+tk.W
-        
     def _component(self):
 
         self.learnRate_lb = tk.Label(self.__WINDOW, text = '學習率', font = ('Arial', 10))
