@@ -22,7 +22,7 @@ class UiLayout:
         self.__WINDOW.geometry("1000x700+500+300")
 
         self._component()
-        figurePlt(self.__WINDOW)
+        # figurePlt(self.__WINDOW)
 
         self.__WINDOW.mainloop()
 
@@ -38,15 +38,15 @@ class UiLayout:
         self.endCondition_lb.grid(row = 1)
         self.endCondition_tf.grid(row = 1, column = 1)
 
-        fileOptions = self.getDataSetFile()
-        self.fileOptionValue = tk.StringVar()
-        self.fileOptionValue.set(fileOptions[0])
+        # fileOptions = self.getDataSetFile()
+        # self.fileOptionValue = tk.StringVar()
+        # self.fileOptionValue.set(fileOptions[0])
 
-        self.fileOption_lb = tk.Label(self.__WINDOW, text = '請選擇檔案', font = ('Arial', 10))
-        self.fileOption_op = tk.OptionMenu(self.__WINDOW, self.fileOptionValue, *fileOptions)
-        self.fileOption_lb.grid(row = 2)
-        self.fileOption_op.grid(row = 2, column = 1)
-        # self.fileOption_op['menu'].entryconfigure(1, state = "disabled")
+        # self.fileOption_lb = tk.Label(self.__WINDOW, text = '請選擇檔案', font = ('Arial', 10))
+        # self.fileOption_op = tk.OptionMenu(self.__WINDOW, self.fileOptionValue, *fileOptions)
+        # self.fileOption_lb.grid(row = 2)
+        # self.fileOption_op.grid(row = 2, column = 1)
+        # # self.fileOption_op['menu'].entryconfigure(1, state = "disabled")
 
         self.startCalcu_bt = tk.Button(self.__WINDOW, text = "開始", command = self._startCalcu)
         self.startCalcu_bt.grid(row = 0, column = 2, columnspan = 2, rowspan = 2, padx = 10, pady = 5)
