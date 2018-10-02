@@ -18,16 +18,16 @@ class figurePlt():
         fig = plt.figure()
         ax = plt.axes()
 
-        plt.xlim(-100, 100)
-        plt.ylim(-100, 100)
+        plt.xlim(-2, 2)
+        plt.ylim(-2, 2)
 
         x = np.linspace(-90, 90)
         ax.plot(x, x)
         
         # x axis value list.
-        x_number_list = [1, 4, 9, 16, 25]
+        x_number_list = [0, 0, 1, 1]
         # y axis value list.
-        y_number_list = [1, 2, 3, 4, 5]
+        y_number_list = [0, 1, 0, 1]
 
         # Draw point based on above x, y axis values.
         plt.scatter(x_number_list, y_number_list, s=10)
