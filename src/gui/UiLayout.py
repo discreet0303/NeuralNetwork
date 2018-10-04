@@ -5,6 +5,7 @@ import numpy as np
 
 from src.file.File import File
 from src.figure.figurePlt import figurePlt
+from src.nerual.Perceptron import Perceptron
 
 class UiLayout: 
 
@@ -47,7 +48,7 @@ class UiLayout:
         )
         self.endCondition_tf.grid( row = 1, column = 1 )
 
-        fileOptions = self.__FILE.getDataSetFile()
+        fileOptions = self.__FILE.getDataSetFileName()
         self.fileOptionValue = tk.StringVar(self.__WINDOW)
         self.fileOptionValue.set(fileOptions[0])
 
@@ -105,8 +106,10 @@ class UiLayout:
 
     def _startCalcu(self):
         
-        self.__FILE.getFileContent(self.fileOptionValue.get())
-        self.__FILE.sortFileContentWithIndex(self.fileOptionValue.get())
+        # self.__FILE.getFileContent(self.fileOptionValue.get())
+        # self.__FILE.sortFileContentWithIndex(self.fileOptionValue.get())
+        Perceptron(0.8, 1000, self.fileOptionValue.get())
+        
         if self.checkValueIsFloat(self.learnRate_tf.get()) and self.checkValueIsFloat(self.endCondition_tf.get()):
 
             self.__WINDOW.quit()

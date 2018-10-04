@@ -23,6 +23,7 @@ class File():
             dataArr.append(arr)
 
         print(dataArr)
+        return dataArr
     
     def sortFileContentWithIndex(self, fileName):
         filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
@@ -43,11 +44,14 @@ class File():
                 index += 1
             
         print(dataArr)
-    
+        return dataArr
 
-    def getDataSetFile(self):
+    def getDataSetFileName(self):
+        disableName = ['IRIS.TXT', 'perceptron4.txt', 'perceptron3.txt', 'xor.txt', 'wine.txt', 'C3D.TXT', '4satellite-6.txt', 'Number.txt', '8OX.TXT', '5CloseS1.txt', 'C10D.TXT']
+
         dataFileArr = []
         for dataFile in os.listdir('./dataSet'):
-            dataFileArr.append(dataFile)
-
+            if dataFile not in disableName:
+                dataFileArr.append(dataFile)
+        
         return tuple(dataFileArr)
