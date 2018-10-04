@@ -6,21 +6,48 @@ class File():
         self.__BASE_DIR_PATH = os.getcwd()
         self.__DATASET_DIR_PATH = os.path.join(self.__BASE_DIR_PATH, 'dataSet')
 
-    def getFileContent(self):
-        filePath = os.path.join(self.__DATASET_DIR_PATH, 'perceptron1.txt')
+    def getFileContent(self, fileName):
+        filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
         
         with open(filePath, 'r') as dataSet:
             originData = dataSet.read().split('\n')
 
-        dataDict = {}
+        dataArr = []
         count = 1
         for data in originData:
             dataLen = len(data.split())
-            arr = []
+            arr = [-1]
             for i in data.split():
                 arr.append(i)
             
-            dataDict[count] = arr
-            count = count + 1
+            dataArr.append(arr)
 
-        print(dataDict)
+        print(dataArr)
+    
+    def sortFileContentWithIndex(self, fileName):
+        filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
+        
+        with open(filePath, 'r') as dataSet:
+            originData = dataSet.read().split('\n')
+
+        dataArr = []
+        dataLength = len(originData[0].split()) - 1
+        for temp in range(0, dataLength):
+            dataArr.append([])
+
+        for data in originData:
+            index = 0
+            for i in data.split():
+                if index < dataLength:
+                    dataArr[index].append(i)
+                index += 1
+            
+        print(dataArr)
+    
+
+    def getDataSetFile(self):
+        dataFileArr = []
+        for dataFile in os.listdir('./dataSet'):
+            dataFileArr.append(dataFile)
+
+        return tuple(dataFileArr)
