@@ -6,26 +6,33 @@ class File():
         self.__BASE_DIR_PATH = os.getcwd()
         self.__DATASET_DIR_PATH = os.path.join(self.__BASE_DIR_PATH, 'dataSet')
 
-    def getFileContent(self, fileName):
+    def getFileContent(self, fileName, dataType):
         filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
         
         with open(filePath, 'r') as dataSet:
             originData = dataSet.read().split('\n')
 
         dataArr = []
-        count = 1
+        maxDataRange = minDataRange = 0
         for data in originData:
-            dataLen = len(data.split())
-            arr = [-1]
+            if len(data.split()) == 0: continue
+
+            if dataType == 1: arr = []
+            elif dataType == -1: arr = [-1]
+
             for i in data.split():
-                arr.append(i)
+                if float(i) > maxDataRange:
+                    maxDataRange = float(i)
+                if float(i) < minDataRange:
+                    minDataRange = float(i)
+
+                arr.append(float(i))
             
             dataArr.append(arr)
 
-        print(dataArr)
-        return dataArr
-    
-    def sortFileContentWithIndex(self, fileName):
+        return dataArr, maxDataRange, minDataRange
+
+    def getFileContentWithIndex(self, fileName):
         filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
         
         with open(filePath, 'r') as dataSet:
@@ -34,7 +41,8 @@ class File():
         dataArr = []
         dataLength = len(originData[0].split()) - 1
         for temp in range(0, dataLength):
-            dataArr.append([])
+            if len(temp) != 0:
+                dataArr.append([])
 
         for data in originData:
             index = 0

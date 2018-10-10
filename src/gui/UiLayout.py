@@ -1,5 +1,9 @@
-import tkinter as tk
 import os
+import sys
+if sys.version_info[0] < 3:
+    import Tkinter as tk
+else:
+    import tkinter as tk
 
 import numpy as np
 
@@ -13,14 +17,41 @@ class UiLayout:
         self.__WINDOW = tk.Tk()
         self.__WINDOW.title("Neural Network HW_01")
         self.__WINDOW.resizable(0, 0)
-        self.__WINDOW.geometry("1000x700+500+300")
+        self.__WINDOW.geometry("750x600+100+100")
+        self.__WINDOW.protocol("WM_DELETE_WINDOW", self._closeWindow)
         
         self.__FILE = File()
 
         self._component()
-        figurePlt(self.__WINDOW)
+
+        self.__FIGURE_PLT = figurePlt(self.__WINDOW)
 
         self.__WINDOW.mainloop()
+
+
+    def checkValueIsFloat(self, value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
+    def _startCalcu(self):
+
+        fileName = self.fileOptionValue.get()
+        data, maxRangeNum, minRangeNum = self.__FILE.getFileContent(fileName, 1)
+        self.__FIGURE_PLT.updateCanvasForPoint(data, maxRangeNum, minRangeNum)
+
+        if self.checkValueIsFloat(self.learnRate_tf.get()) and self.checkValueIsFloat(self.endCondition_tf.get()):
+            
+            print('success')
+        else:
+            print('fail')
+
+    def _closeWindow(self):
+        print('button clicked')
+        self.__WINDOW.quit()
+        self.__WINDOW.destroy()
 
     def _component(self):
 
@@ -61,7 +92,7 @@ class UiLayout:
 
         self.fileOption_op = tk.OptionMenu(
             self.__WINDOW, 
-            self.fileOptionValue, 
+            self.fileOptionValue,
             *fileOptions
         )
         self.fileOption_op.grid( row = 2, column = 1 )
@@ -96,29 +127,3 @@ class UiLayout:
             pady = 5
         )
         
-
-    def checkValueIsFloat(self, value):
-        try:
-            float(value)
-            return True
-        except ValueError:
-            return False
-
-    def _startCalcu(self):
-        
-        # self.__FILE.getFileContent(self.fileOptionValue.get())
-        # self.__FILE.sortFileContentWithIndex(self.fileOptionValue.get())
-        Perceptron(0.8, 1000, self.fileOptionValue.get())
-        
-        if self.checkValueIsFloat(self.learnRate_tf.get()) and self.checkValueIsFloat(self.endCondition_tf.get()):
-
-            self.__WINDOW.quit()
-            self.__WINDOW.destroy()
-            print('success')
-        else:
-            print('fail')
-
-    def _closeWindow(self):
-        print('button clicked')
-        self.__WINDOW.quit()
-        self.__WINDOW.destroy()
