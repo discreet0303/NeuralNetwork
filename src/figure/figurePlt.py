@@ -2,7 +2,6 @@ import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
@@ -21,23 +20,26 @@ class figurePlt():
         self.scalePlt()
 
         self.__CANVAS.draw()
-        self.__CANVAS.get_tk_widget().grid(row = 4, column = 0, columnspan = 7, pady = (15, 15), padx = (25, 25))
+        self.__CANVAS.get_tk_widget().grid(row = 5, column = 0, columnspan = 7, pady = (15, 15), padx = (25, 25))
 
     def clearPlt(self):
         plt.clf()
 
     def scalePlt(self):
-        plt.xlim(self.__MIN_DATA_RANGE, self.__MAX_DATA_RANGE)
-        plt.ylim(self.__MIN_DATA_RANGE, self.__MAX_DATA_RANGE)
+        plt.xlim(self.__MIN_DATA_RANGE - 1, self.__MAX_DATA_RANGE + 1)
+        plt.ylim(self.__MIN_DATA_RANGE - 1, self.__MAX_DATA_RANGE + 1)
 
     def resetDataRagne(self, maxDataRange, minDataRange):
         self.__MAX_DATA_RANGE = maxDataRange
         self.__MIN_DATA_RANGE = minDataRange
         self.scalePlt()
 
-    def updateCanvasForPoint(self, dataSetPoints, maxRangeNum, minRangeNum):
-        self.resetDataRagne(int(maxRangeNum) + 2, int(minRangeNum) - 2)
+    def updateCanvasForPoint(self, dataSetPoints, testDataIndex):
+        self.resetDataRagne(int(self.__MAX_DATA_RANGE), int(self.__MIN_DATA_RANGE))
         
+        traingCount = int((len(dataSetPoints) / 3) * 2 + 1)
+        count = 1
+
         for point in dataSetPoints:
             if point[2] == 0:
                 color = 'b'
@@ -51,19 +53,28 @@ class figurePlt():
                 color = 'm'
             else:
                 color = 'g'
+            
+            if count - 1 in testDataIndex:
+                mark = 'x'
+                color = 'k'
+            else:
+                mark = '.'
+            
 
-            plt.scatter(point[0], point[1], s = 10, c = color)
+            plt.scatter(point[0], point[1], s = 20, c = color, marker = mark)
+            # if count > traingCount:
+            #     plt.scatter(point[0], point[1], s = 20, c = color, marker = mark)
+            # else:
+            #     plt.scatter(point[0], point[1], s = 20, c = color, marker = mark)
+            count += 1
 
         self.__CANVAS.draw()
 
-    def updateCanvasForLine(self, answer, maxRangeNum, minRangeNum):
-        # self.scalePlt(maxRangeNum, minRangeNum)
-
-        print('updateCanvas')
-        self.resetDataRagne(int(maxRangeNum) + 2, int(minRangeNum) - 2)
+    def updateCanvasForLine(self, answer):
+        self.resetDataRagne(int(self.__MAX_DATA_RANGE), int(self.__MIN_DATA_RANGE))
 
         ax = plt.axes()
-        x = np.linspace(minRangeNum - 2, maxRangeNum + 2)
+        x = np.linspace(self.__MIN_DATA_RANGE - 2, self.__MAX_DATA_RANGE + 2)
         y = answer[0] - answer[1] * x
         ax.plot(x, y)
 

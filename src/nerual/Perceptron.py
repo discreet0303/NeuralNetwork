@@ -5,11 +5,11 @@ from src.file.File import File
 class Perceptron():
 
     def __init__(self, learnRate, endRound, fileName):
-        print('Perceptron')
         self.__LEARN_RATE = learnRate
         self.__END_ROUND = endRound
         self.__DATA_WITH_WEIGHT, maxDataRange, minDataRange = File().getFileContent(fileName, -1)
 
+        self.__DATA_FOR_TRAINING, self.__DATA_FOR_TESTING  = self.randomDataTo2Array(self.__DATA_WITH_WEIGHT)
         self.__DATA_LENGTH = len(self.__DATA_WITH_WEIGHT[0]) - 2
         self.__DATA_WITH_WEIGHT_LENGTH = self.__DATA_LENGTH + 1
         self.__W = self.randomWeight()
@@ -19,16 +19,35 @@ class Perceptron():
             if i[self.__DATA_LENGTH + 1] not in self.__E:
                 self.__E.append(i[self.__DATA_LENGTH + 1])
 
-        # self.perceptronCalcu(self.__DATA_WITH_WEIGHT)
-
     def randomWeight(self):
         weight = []
         for count in range(0, self.__DATA_LENGTH + 1):
             weight.append( round( random.uniform(-1, 1), 2 ) )
         return weight
 
-    def perceptronCalcu(self):
-        originData = self.__DATA_WITH_WEIGHT
+    def randomDataTo2Array(self, data):
+        index = 0
+        testingCount = int((len(data) / 3) * 1)
+        dataForTraining = data[:]
+        dataForTesting = []
+        while testingCount != len(dataForTesting):
+            trainingRange = len(dataForTraining) - 1
+            index = random.randint(0, trainingRange)
+            dataForTesting.append(dataForTraining[index])
+            del dataForTraining[index]
+
+        return dataForTraining, dataForTesting
+
+    def perceptronCalcu(self, dataType):
+        if dataType == 'all':
+            dataType = self.__DATA_WITH_WEIGHT
+        elif dataType == 'training':
+            originData = self.__DATA_FOR_TRAINING
+        elif dataType == 'testing':
+            originData = self.__DATA_FOR_TESTING
+        else:
+            originData = []
+
         roundTime = 0
         while(roundTime < self.__END_ROUND):
             roundTime += 1
@@ -47,10 +66,6 @@ class Perceptron():
 
             if end:
                 roundTime = 1000
-        # print('perceptronCalcu start')
-        # print(self.__W)
-        # print('----- end')
-        # self.calcuWeightToRightType()
 
 
     def checkValueIsRight(self, originData, answer):
@@ -85,11 +100,57 @@ class Perceptron():
             count += 1
 
         self.__W = temp
-    
-    def calcuWeightToRightType(self):
-        
+
+    def getWeightYToZero(self):
         temp = []
+
+        if self.__W[self.__DATA_LENGTH] == 0:
+            self.__W = self.randomWeight()
+            self.perceptronCalcu('training')
+
         for w in self.__W:
             temp.append( round(w / self.__W[self.__DATA_LENGTH], 2) )
 
         return temp
+    
+    def getWeight(self):
+        return self.__W
+
+    def getTestingDataIndex(self):
+        temp = []
+        for testingData in self.__DATA_FOR_TESTING:
+            count = 0
+            for data in self.__DATA_WITH_WEIGHT:    
+
+                if testingData == data:
+                    temp.append(count)
+                count += 1
+
+        return temp
+    
+    def getDataSuccessRate(self, rateType):
+        if rateType == 'training':
+            data = self.__DATA_FOR_TRAINING
+        elif rateType == 'testing':
+            data = self.__DATA_FOR_TESTING
+        else:
+            return 0
+
+        dataSetArea = self.__E
+        answerIndex = self.__DATA_WITH_WEIGHT_LENGTH
+        count = 0
+
+        for dataWithWeight in data:
+            answer = np.dot(self.__W, dataWithWeight[:self.__DATA_WITH_WEIGHT_LENGTH])
+
+            if answer < 0:
+                if dataWithWeight[answerIndex] == dataSetArea[0]:
+                    count += 1
+            elif answer >= 0:
+                if dataWithWeight[answerIndex] == dataSetArea[1]:
+                    count += 1
+
+        if count == 0:
+            return 0
+        else:
+            return round( count / len(data) * 100, 2)
