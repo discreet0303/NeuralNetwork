@@ -1,7 +1,6 @@
 import matplotlib
 matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
@@ -11,29 +10,33 @@ import numpy as np
 
 class figurePlt():
     
-    def __init__(self, __WINDOW):
+    def __init__(self, __WINDOW, maxDataRange, minDataRange):
         self.__WINDOW = __WINDOW
 
         self.__FIG = plt.figure()
         self.__CANVAS = FigureCanvasTkAgg(self.__FIG, master = self.__WINDOW)
 
-        self.initPlt()
+        self.__MAX_DATA_RANGE = maxDataRange
+        self.__MIN_DATA_RANGE = minDataRange
+        self.scalePlt()
+
         self.__CANVAS.draw()
         self.__CANVAS.get_tk_widget().grid(row = 4, column = 0, columnspan = 7, pady = (15, 15), padx = (25, 25))
 
-
-    def initPlt(self):
+    def clearPlt(self):
         plt.clf()
-        plt.xlim(-2, 2)
-        plt.ylim(-2, 2)
+
+    def scalePlt(self):
+        plt.xlim(self.__MIN_DATA_RANGE, self.__MAX_DATA_RANGE)
+        plt.ylim(self.__MIN_DATA_RANGE, self.__MAX_DATA_RANGE)
+
+    def resetDataRagne(self, maxDataRange, minDataRange):
+        self.__MAX_DATA_RANGE = maxDataRange
+        self.__MIN_DATA_RANGE = minDataRange
+        self.scalePlt()
 
     def updateCanvasForPoint(self, dataSetPoints, maxRangeNum, minRangeNum):
-
-        plt.clf()
-        maxRangeNum = int(maxRangeNum) + 2
-        minRangeNum = int(minRangeNum) - 2
-        plt.xlim(minRangeNum, maxRangeNum)
-        plt.ylim(minRangeNum, maxRangeNum)
+        self.resetDataRagne(int(maxRangeNum) + 2, int(minRangeNum) - 2)
         
         for point in dataSetPoints:
             if point[2] == 0:
@@ -53,14 +56,15 @@ class figurePlt():
 
         self.__CANVAS.draw()
 
-    def updateCanvasForLine(self):
+    def updateCanvasForLine(self, answer, maxRangeNum, minRangeNum):
+        # self.scalePlt(maxRangeNum, minRangeNum)
 
         print('updateCanvas')
-        self.initPlt()
+        self.resetDataRagne(int(maxRangeNum) + 2, int(minRangeNum) - 2)
 
-        x_number_list2 = [1, 1, 1.5, 1.5]
-        y_number_list2 = [0, 1, 0, 1]
-
-        plt.scatter(x_number_list2, y_number_list2, s=10)
+        ax = plt.axes()
+        x = np.linspace(minRangeNum - 2, maxRangeNum + 2)
+        y = answer[0] - answer[1] * x
+        ax.plot(x, y)
 
         self.__CANVAS.draw()

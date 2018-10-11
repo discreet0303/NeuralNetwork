@@ -24,7 +24,7 @@ class UiLayout:
 
         self._component()
 
-        self.__FIGURE_PLT = figurePlt(self.__WINDOW)
+        self.__FIGURE_PLT = figurePlt(self.__WINDOW, 2, -2)
 
         self.__WINDOW.mainloop()
 
@@ -41,6 +41,13 @@ class UiLayout:
         fileName = self.fileOptionValue.get()
         data, maxRangeNum, minRangeNum = self.__FILE.getFileContent(fileName, 1)
         self.__FIGURE_PLT.updateCanvasForPoint(data, maxRangeNum, minRangeNum)
+
+        __PERCEPTRON = Perceptron(0.1, 100, fileName)
+        __PERCEPTRON.perceptronCalcu()
+        arr = __PERCEPTRON.calcuWeightToRightType()
+
+        self.__FIGURE_PLT.updateCanvasForLine(arr, maxRangeNum, minRangeNum)
+        self.__FIGURE_PLT.clearPlt()
 
         if self.checkValueIsFloat(self.learnRate_tf.get()) and self.checkValueIsFloat(self.endCondition_tf.get()):
             
