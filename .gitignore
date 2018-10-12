@@ -135,3 +135,4 @@ Backup of *.doc*
 .vscode/*
 !.vscode/settings.json
 !main.spec
+!mainOneFile.spec
