@@ -5,9 +5,6 @@ class File():
     def __init__(self):
         self.__BASE_DIR_PATH = os.getcwd()
         self.__DATASET_DIR_PATH = os.path.join(self.__BASE_DIR_PATH, 'dataSet')
-        print(self.__BASE_DIR_PATH)
-        print(self.__DATASET_DIR_PATH)
-        print(self.getFileContent('xor.txt', 1))
 
     def getFileContent(self, fileName, dataType):
         filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
