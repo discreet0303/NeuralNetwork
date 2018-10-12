@@ -1,5 +1,4 @@
-from src.gui.UiLayout import UiLayout
+from src.gui import UiLayout
 
 if __name__ == "__main__":
-    UiLayout()
-    print('main')
+    UiLayout.UiLayout()
