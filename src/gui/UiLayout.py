@@ -37,15 +37,17 @@ class UiLayout:
 
     def _startCalcu(self):
         self.__FIGURE_PLT.clearPlt()
-        
-        if self.checkValueIsFloat(self.learnRate_tf.get()) or not self.checkValueIsFloat(self.endCondition_tf.get()):
-        # if self.checkValueIsFloat(self.learnRate_tf.get()) and self.checkValueIsFloat(self.endCondition_tf.get()):
+
+        learnRate = self.learnRate_tf.get()
+        endTime = self.endCondition_tf.get()
+
+        if self.checkValueIsFloat(learnRate) and self.checkValueIsFloat(endTime):
             self.errorMsg_lb_var.set('')
 
             fileName = self.fileOptionValue.get()
             data, maxRangeNum, minRangeNum = self.__FILE.getFileContent(fileName, 1)
 
-            __PERCEPTRON = Perceptron(0.1, 100, fileName)
+            __PERCEPTRON = Perceptron(float(learnRate), float(endTime), fileName)
             
             self.showStartW_lb_var.set('起始鍵結值:' + str(__PERCEPTRON.getWeight()) )
             __PERCEPTRON.perceptronCalcu('training')

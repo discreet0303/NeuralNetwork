@@ -51,19 +51,13 @@ class Perceptron():
         roundTime = 0
         while(roundTime < self.__END_ROUND):
             roundTime += 1
-
-            index = 0
             end = True
             for dataWithWeight in originData:
-                
                 dataSetArr = dataWithWeight[:self.__DATA_WITH_WEIGHT_LENGTH]
 
                 answer = np.dot(self.__W, dataSetArr)
                 if self.checkValueIsRight(dataWithWeight, answer):
                     end = False
-                
-                index += 1
-
             if end:
                 roundTime = 1000
 
