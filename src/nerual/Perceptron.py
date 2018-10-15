@@ -51,15 +51,15 @@ class Perceptron():
         roundTime = 0
         while(roundTime < self.__END_ROUND):
             roundTime += 1
-            end = True
+            allDataPass = True
             for dataWithWeight in originData:
                 dataSetArr = dataWithWeight[:self.__DATA_WITH_WEIGHT_LENGTH]
 
                 answer = np.dot(self.__W, dataSetArr)
                 if self.checkValueIsRight(dataWithWeight, answer):
-                    end = False
-            if end:
-                roundTime = 1000
+                    allDataPass = False
+            if allDataPass:
+                roundTime = self.__END_ROUND + 1
 
 
     def checkValueIsRight(self, originData, answer):
@@ -82,9 +82,9 @@ class Perceptron():
 
         for i in originData:
             if calcuType == 0:
-                val = round( self.__W[count] - 0.05 * i, 2 )
+                val = round( self.__W[count] - self.__LEARN_RATE * i, 2 )
             else:
-                val = round( self.__W[count] + 0.05 * i, 2 )
+                val = round( self.__W[count] + self.__LEARN_RATE * i, 2 )
 
             if val > 1:
                 val = 1

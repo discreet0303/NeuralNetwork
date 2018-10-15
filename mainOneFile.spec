@@ -1,4 +1,5 @@
 # put the dataSet in the same folder 
+# run 'pyinstaller mainOneFile.spec'
 
 block_cipher = None
 

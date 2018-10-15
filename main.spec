@@ -1,4 +1,4 @@
-# -*- mode: python -*-
+# run 'pyinstaller main.spec'
 
 block_cipher = None
 
