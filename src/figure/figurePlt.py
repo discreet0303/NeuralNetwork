@@ -9,10 +9,13 @@ import numpy as np
 
 class figurePlt():
     
-    def __init__(self, __WINDOW, maxDataRange, minDataRange):
+    def __init__(self, __WINDOW, maxDataRange, minDataRange, column, figTitle):
         self.__WINDOW = __WINDOW
 
-        self.__FIG = plt.figure()
+        self.__FIG = plt.figure(num=1, figsize=(5, 5), dpi=80)
+        self.__FIG_TITLE = figTitle
+        self.__FIG.suptitle(self.__FIG_TITLE, fontsize = 20)
+        
         self.__CANVAS = FigureCanvasTkAgg(self.__FIG, master = self.__WINDOW)
 
         self.__MAX_DATA_RANGE = maxDataRange
@@ -20,10 +23,11 @@ class figurePlt():
         self.scalePlt()
 
         self.__CANVAS.draw()
-        self.__CANVAS.get_tk_widget().grid(row = 5, column = 0, columnspan = 7, pady = (15, 15), padx = (25, 25))
+        self.__CANVAS.get_tk_widget().grid(row = 5, column = column, columnspan = 6)
 
     def clearPlt(self):
         plt.clf()
+        self.__FIG.suptitle(self.__FIG_TITLE, fontsize = 20)
 
     def scalePlt(self):
         plt.xlim(self.__MIN_DATA_RANGE - 1, self.__MAX_DATA_RANGE + 1)
@@ -69,6 +73,7 @@ class figurePlt():
             count += 1
 
         self.__CANVAS.draw()
+        self.__CANVAS.get_tk_widget().grid(row = 5, column = 0, columnspan = 6)
 
     def updateCanvasForLine(self, answer):
         self.resetDataRagne(int(self.__MAX_DATA_RANGE), int(self.__MIN_DATA_RANGE))
@@ -79,3 +84,4 @@ class figurePlt():
         ax.plot(x, y)
 
         self.__CANVAS.draw()
+        self.__CANVAS.get_tk_widget().grid(row = 5, column = 0, columnspan = 6)

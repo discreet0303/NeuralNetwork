@@ -16,14 +16,15 @@ class UiLayout:
         self.__WINDOW = tk.Tk()
         self.__WINDOW.title("Neural Network HW_01")
         self.__WINDOW.resizable(0, 0)
-        self.__WINDOW.geometry("750x650+100+100")
+        self.__WINDOW.geometry("850x650+100+100")
         self.__WINDOW.protocol("WM_DELETE_WINDOW", self._closeWindow)
         
         self.__FILE = File()
 
         self._component()
 
-        self.__FIGURE_PLT = figurePlt(self.__WINDOW, 2, -2)
+        self.__FIGURE_PLT = figurePlt(self.__WINDOW, 2, -2, 0, 'Train')
+        self.__FIGURE_PLT1 = figurePlt(self.__WINDOW, 2, -2, 6, 'Test')
 
         self.__WINDOW.mainloop()
 
@@ -38,13 +39,13 @@ class UiLayout:
     def _startCalcu(self):
         self.__FIGURE_PLT.clearPlt()
 
-        learnRate = self.learnRate_tf.get()
-        endTime = self.endCondition_tf.get()
+        learnRate = 0.8 #self.learnRate_tf.get()
+        endTime = 1000 #self.endCondition_tf.get()
 
         if self.checkValueIsFloat(learnRate) and self.checkValueIsFloat(endTime):
             self.errorMsg_lb_var.set('')
 
-            fileName = self.fileOptionValue.get()
+            fileName = '2CS.txt' #self.fileOptionValue.get()
             data, maxRangeNum, minRangeNum = self.__FILE.getFileContent(fileName, 1)
 
             __PERCEPTRON = Perceptron(float(learnRate), float(endTime), fileName)
@@ -78,7 +79,7 @@ class UiLayout:
             text = '學習率', 
             font = ('Arial', 10)
         )
-        self.learnRate_lb.grid( row = 0 )
+        self.learnRate_lb.grid( row = 0, column = 0 )
 
         self.learnRate_tf = tk.Entry(
             self.__WINDOW,
@@ -90,30 +91,30 @@ class UiLayout:
             text = '收斂條件', 
             font = ('Arial', 10)
         )
-        self.endCondition_lb.grid( row = 1 )
+        self.endCondition_lb.grid( row = 1, column = 0 )
 
         self.endCondition_tf = tk.Entry(
             self.__WINDOW,
         )
         self.endCondition_tf.grid( row = 1, column = 1 )
 
-        fileOptions = self.__FILE.getDataSetFileName()
-        self.fileOptionValue = tk.StringVar(self.__WINDOW)
-        self.fileOptionValue.set(fileOptions[0])
+        # fileOptions = self.__FILE.getDataSetFileName()
+        # self.fileOptionValue = tk.StringVar(self.__WINDOW)
+        # self.fileOptionValue.set(fileOptions[0])
 
-        self.fileOption_lb = tk.Label(
-            self.__WINDOW, 
-            text = '請選擇檔案', 
-            font = ('Arial', 10)
-        )
-        self.fileOption_lb.grid( row = 2 )
+        # self.fileOption_lb = tk.Label(
+        #     self.__WINDOW, 
+        #     text = '請選擇檔案', 
+        #     font = ('Arial', 10)
+        # )
+        # self.fileOption_lb.grid( row = 2 )
 
-        self.fileOption_op = tk.OptionMenu(
-            self.__WINDOW, 
-            self.fileOptionValue,
-            *fileOptions
-        )
-        self.fileOption_op.grid( row = 2, column = 1 )
+        # self.fileOption_op = tk.OptionMenu(
+        #     self.__WINDOW, 
+        #     self.fileOptionValue,
+        #     *fileOptions
+        # )
+        # self.fileOption_op.grid( row = 2, column = 1 )
 
         self.startCalcu_bt = tk.Button(
             self.__WINDOW, 
@@ -123,11 +124,7 @@ class UiLayout:
         )
         self.startCalcu_bt.grid(
             row = 0, 
-            rowspan = 2, 
-            column = 2, 
-            columnspan = 2, 
-            padx = 10, 
-            pady = 5
+            column = 2
         )
         
         self.closeWindow_bt = tk.Button(
@@ -137,13 +134,16 @@ class UiLayout:
             width = 10
         )
         self.closeWindow_bt.grid(
-            row = 0, 
+            row = 0,
             column = 4, 
-            columnspan = 2, 
-            rowspan = 2, 
-            padx = 10, 
-            pady = 5
         )
+        listbox = tk.Listbox(self.__WINDOW)
+        listbox.grid(row = 9, column = 0)
+        END = []
+        listbox.insert(END, "a list entry")
+
+        for item in ["one", "two", "three", "four"]:
+            listbox.insert(END, item)
 
         self.errorMsg_lb_var = tk.StringVar()
         errorMsg_lb = tk.Label(
@@ -160,16 +160,16 @@ class UiLayout:
             textvariable = self.showStartW_lb_var, 
             font = ('Arial', 10)
         )
-        showW_lb.grid( row = 6, column = 0 )
+        showW_lb.grid( row = 6, column = 0, columnspan = 3, sticky='W' )
 
         self.showEndW_lb_var = tk.StringVar()
-        self.showEndW_lb_var.set('結束鍵結值:')
-        showW_lb = tk.Label(
-            self.__WINDOW, 
-            textvariable = self.showEndW_lb_var, 
-            font = ('Arial', 10)
-        )
-        showW_lb.grid( row = 6, column = 2 )
+        # self.showEndW_lb_var.set('結束鍵結值:')
+        # showW_lb = tk.Label(
+        #     self.__WINDOW, 
+        #     textvariable = self.showEndW_lb_var, 
+        #     font = ('Arial', 10)
+        # )
+        # showW_lb.grid( row = 8, column = 3, columnspan = 3 )
 
         self.showTrainingRate_lb_var = tk.StringVar()
         self.showTrainingRate_lb_var.set('訓練辨識率:')
@@ -178,7 +178,7 @@ class UiLayout:
             textvariable = self.showTrainingRate_lb_var, 
             font = ('Arial', 10)
         )
-        showTrainingRate_lb.grid( row = 7, column = 0 )
+        showTrainingRate_lb.grid( row = 7, column = 1 )
 
         self.showTestingRate_lb_var = tk.StringVar()
         self.showTestingRate_lb_var.set('測試辨識率:')
@@ -187,4 +187,4 @@ class UiLayout:
             textvariable = self.showTestingRate_lb_var, 
             font = ('Arial', 10)
         )
-        showTestingRate_lb.grid( row = 7, column = 1 )
+        showTestingRate_lb.grid( row = 7, column = 2 )
