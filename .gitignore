@@ -133,7 +133,6 @@ Backup of *.doc*
 *.~vsd*
 
 .vscode/*
-!.vscode/settings.json
 !main.spec
 !mainOneFile.spec
-/picture
+picture/
