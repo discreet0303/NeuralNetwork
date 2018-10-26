@@ -109,3 +109,31 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# General
+.DS_Store
+*.tmp
+
+# Word temporary
+~$*.doc*
+
+# Word Auto Backup File
+Backup of *.doc*
+
+# Excel temporary
+~$*.xls*
+
+# Excel Backup File
+*.xlk
+
+# PowerPoint temporary
+~$*.ppt*
+
+# Visio autosave temporary files
+*.~vsd*
+
+.vscode/*
+!.vscode/settings.json
+!main.spec
+!mainOneFile.spec
+/picture
