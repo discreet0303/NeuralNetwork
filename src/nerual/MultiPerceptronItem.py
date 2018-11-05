@@ -2,7 +2,7 @@ import random
 import numpy as np
 import math
 
-class PerceptronV2:
+class MultiPerceptronItem():
     def __init__(self):
         print('PerceptronV2')
         
@@ -24,7 +24,6 @@ class PerceptronV2:
         self.__EOutput = sigmoidalNum
     
     def getEOutput(self):
-        print(self.__EOutput)
         return self.__EOutput
 
     def randomWeight(self):
@@ -34,7 +33,6 @@ class PerceptronV2:
         self.__W = [-1.2, 1, 1]
 
     def getWeight(self):
-        print(self.__W)
         return self.__W
 
     def setWeight(self, w):
@@ -43,19 +41,13 @@ class PerceptronV2:
     def setBackPropagate(self, outputLevel, preBackPropagate, weightValue):
         if outputLevel:
             self.__BACK_PROPAGATE = (self.__DATA[1] - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
-            print('output level')
         else:
             self.__BACK_PROPAGATE = self.__EOutput * (1 - self.__EOutput) * preBackPropagate * weightValue
-            print('preBackPropagate level')
-        # print(self.__EOutput)
-        # print(preBackPropagate)
-        # print(weightValue)
-        # print(self.__BACK_PROPAGATE)
 
     def getBackPropagate(self):
         return self.__BACK_PROPAGATE
 
-    def resetWeight(self):
+    def updateWeight(self):
         temp = []
 
         for index, item in enumerate(self.__W):
@@ -63,5 +55,4 @@ class PerceptronV2:
             temp.append(val)
         
         self.__W = temp
-        print(self.__W)
 

@@ -1,107 +1,58 @@
-
+# Hw1
 # from src.gui import UiLayout
 
 # if __name__ == "__main__":
 #     UiLayout.UiLayout()
 
-from src.nerual.PerceptronV2 import PerceptronV2
-import numpy as np
-
-xorData = [
-    [[-1, 0, 0], 0],
-    [[-1, 0, 1], 1],
-    [[-1, 1, 0], 1],
-    [[-1, 1, 1], 0],
-]
-
-def mulitPerceptron():
-    multiPerceptronModel = [
-        [PerceptronV2(), PerceptronV2()],
-        [PerceptronV2()]
-    ]
-
-    multiPerceptronModel[0][0].setWeight([-1.2, 1, 1])
-    multiPerceptronModel[0][1].setWeight([0.3, 1, 1])
-    multiPerceptronModel[1][0].setWeight([0.5, 0.4, 0.8])
-
-    inputTemp = xorData[3]
-
-    for levelCount, level in enumerate(multiPerceptronModel):
-        for perceptron in level:
-            if levelCount == 0:
-                perceptron.setInputData(inputTemp)
-            else:
-                EOutput = getLevelPerceptronOutput(multiPerceptronModel[levelCount - 1])
-                perceptron.setInputData([EOutput, 0])
-    
-    last = 0
-    for levelIndex, level in enumerate(multiPerceptronModel[::-1]):
-        # print(levelIndex)
-        # print(backPerceptron)
-        # print('-----------')
-        
-        for backPerceptronIndex, backPerceptron in enumerate(level):
-            if levelIndex == 0:
-                backPerceptron.setBackPropagate(True, 0, 0)
-                last = backPerceptron.getBackPropagate()
-            else:
-                if backPerceptronIndex == 0:
-                    backPerceptron.setBackPropagate(False, last, 0.4)
-                elif backPerceptronIndex == 1:
-                    backPerceptron.setBackPropagate(False, last, 0.8)
-
-                # print(backPerceptron.getBackPropagate())
-
-            backPerceptron.resetWeight()
-
-
-
-
-    # print('10----------Start')
-    # # print(multiPerceptronModel[1][0].getEOutput())
-    # # print(test[1][0].getWeight())
-    # test[1][0].setBackPropagate(True, 0, 0)
-    # last = test[1][0].getBackPropagate()
-    # test[1][0].resetWeight()
-    # print('10----------')
-
-    # print('00----------Start')
-    # # print(test[0][0].getEOutput())
-    # # print(test[0][0].getWeight())
-    # test[0][0].setBackPropagate(False, last, 0.4)
-    # test[0][0].resetWeight()
-    # print('00----------End')
-
-    # print('01----------Start')
-    # # print(test[0][1].getEOutput())
-    # # print(test[0][1].getWeight())
-    # test[0][1].setBackPropagate(False, last, 0.8)
-    # test[0][1].resetWeight()
-    # print('01----------End')
-
-    regexEValue()
-
-def getLevelPerceptronOutput(perceptronItems):
-    EOutputData = [-1]
-    for item in perceptronItems:
-        EOutputData.append(item.getEOutput())
-    return EOutputData
-
-
-def regexEValue():
-    allEValue = [1, 2, -1]
-
-    temp = {}
-    num = 1 / len(allEValue)
-    for index, value in enumerate(allEValue):
-        temp.update({
-            index: {
-                'e': value,
-                'minRange': index * num,
-                'maxRange': (index + 1) * num
-            }
-        })
-
+# Hw2
+from src.nerual.MultiPerceptron import MultiPerceptron
+from src.gui.UiLayoutV2 import UiLayoutV2
 
 if __name__ == "__main__":
-    mulitPerceptron()
+    ui = UiLayoutV2()
+    
+# try:
+#     from Tkinter import *
+#     from ttk import *
+# except ImportError:  # Python 3
+#     from tkinter import *
+#     from tkinter.ttk import *
+
+
+# class App(Frame):
+
+#     def __init__(self, parent):
+#         Frame.__init__(self, parent)
+#         self.CreateUI()
+#         self.LoadTable()
+#         self.grid(sticky = (N,S,W,E))
+#         parent.grid_rowconfigure(0, weight = 1)
+#         parent.grid_columnconfigure(0, weight = 1)
+
+#     def CreateUI(self):
+#         tv = Treeview(self)
+#         tv['columns'] = ('starttime', 'endtime', 'status')
+#         tv.heading("#0", text='Sources', anchor='w')
+#         tv.column("#0", anchor="w")
+#         tv.heading('starttime', text='Start Time')
+#         tv.column('starttime', anchor='center', width=100)
+#         tv.heading('endtime', text='End Time')
+#         tv.column('endtime', anchor='center', width=100)
+#         tv.heading('status', text='Status')
+#         tv.column('status', anchor='center', width=100)
+#         tv.grid(sticky = (N,S,W,E))
+#         self.treeview = tv
+#         self.grid_rowconfigure(0, weight = 1)
+#         self.grid_columnconfigure(0, weight = 1)
+
+#     def LoadTable(self):
+#         self.treeview.insert('', 'end', text="First", values=('10:00',
+#                              '10:10', 'Ok'))
+
+# def main():
+#     root = Tk()
+#     App(root)
+#     root.mainloop()
+
+# if __name__ == '__main__':
+#     main()
