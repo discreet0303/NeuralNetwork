@@ -14,13 +14,12 @@ class UiLayoutV2():
     self.__WINDOW = tk.Tk()
     self.__WINDOW.title("Neural Network HW_02")
     self.__WINDOW.resizable(0, 0)
-    self.__WINDOW.geometry("800x800+100+100")
+    self.__WINDOW.geometry("740x775+100+100")
     self.__WINDOW.protocol("WM_DELETE_WINDOW", self._closeWindow)
     
     self.__FIGURE_PLT = FigurePltV2(self.__WINDOW)
     
     self._component()
-    self.tableLayout()
     
     self.__WINDOW.mainloop()
 
@@ -56,11 +55,14 @@ class UiLayoutV2():
       self.__WINDOW, 
       text = "開始", 
       command = self._startCalcu, 
-      width = 10
+      width = 5,
+      height = 3,
     )
     self.startCalcu_bt.grid(
-      row = 2, 
-      column = 6,
+      row = 0,
+      column = 8,
+      rowspan = 2,
+      padx = 5,
       pady = 5,
     )
 
@@ -68,34 +70,61 @@ class UiLayoutV2():
       self.__WINDOW, 
       text = "結束", 
       command = self._closeWindow, 
-      width = 10
+      width = 5,
+      height = 3,
     )
     self.closeWindow_bt.grid(
-      row = 2,
-      column = 7,
+      row = 0,
+      column = 9,
+      rowspan = 2,
+      padx = 5,
       pady = 5,
     )
 
-  def tableLayout(self):
-    tv = ttk.Treeview(self.__WINDOW)
-    tv['columns'] = ('Value')
-    tv.heading("#0", text='WeightIndex', anchor='w')
-    tv.column("#0", anchor="w", width = 75)
-    tv.heading('Value', text='Value')
-    tv.column('Value', anchor='center', width = 200)
-    tv.grid( 
-      row = 20, 
+    self.testWeight_lb = tk.Label(
+      self.__WINDOW, 
+      text = '訓練前 Weight', 
+      font = ('Arial', 10)
+    )
+    self.testWeight_lb.grid( row = 18, column = 7)
+
+    self.testgWeight_tv = ttk.Treeview(self.__WINDOW)
+    self.testgWeight_tv['columns'] = ('Value')
+    self.testgWeight_tv.heading("#0", text='WeightIndex', anchor='w')
+    self.testgWeight_tv.column("#0", anchor="w", width = 100)
+    self.testgWeight_tv.heading('Value', text='Value')
+    self.testgWeight_tv.column('Value', anchor='center', width = 200)
+    self.testgWeight_tv.grid( 
+      row = 19, 
       column = 6,
       rowspan = 10,
-      columnspan = 10
+      columnspan = 5,
+      padx = 20,
     )
-    tv.insert('', 'end', text="1", values=('10:00'))
-    tv.insert('', 'end', text="2", values=('10:00'))
-    tv.insert('', 'end', text="3", values=('10:00'))
-    tv.insert('', 'end', text="4", values=('10:00'))
-    tv.insert('', 'end', text="5", values=('10:00'))
-    tv.insert('', 'end', text="6", values=('10:00'))
-    tv.insert('', 'end', text="7", values=('10:00'))
+    self.trainingWeight_lb = tk.Label(
+      self.__WINDOW, 
+      text = '訓練後 Weight', 
+      font = ('Arial', 10)
+    )
+    self.trainingWeight_lb.grid( row = 29, column = 7)
+
+    self.trainingWeight_tv = ttk.Treeview(self.__WINDOW)
+    self.trainingWeight_tv['columns'] = ('Value')
+    self.trainingWeight_tv.heading("#0", text='WeightIndex', anchor='w')
+    self.trainingWeight_tv.column("#0", anchor="w", width = 100)
+    self.trainingWeight_tv.heading('Value', text='Value')
+    self.trainingWeight_tv.column('Value', anchor='center', width = 200)
+    self.trainingWeight_tv.grid( 
+      row = 30, 
+      column = 6,
+      rowspan = 10,
+      columnspan = 5,
+      padx = 20,
+    )
+
+  def updateWeightData(self, tv, datas):
+    for index, data in enumerate(datas):
+      tv.insert('', 'end', text = index, values=('0.12345789123456'))
 
   def _closeWindow(self):
     self.__WINDOW.quit()

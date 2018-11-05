@@ -21,7 +21,22 @@ class MultiPerceptron():
 
     # self.checkWeight(0, 0.4)
 
-  def training(self, inputData):
+  def startTraining(self):
+    xor = [
+      [[-1, 1, 1], 0],
+      [[-1, 0, 0], 0],
+      [[-1, 0, 1], 1],
+      [[-1, 1, 0], 1],
+    ]
+
+    self.singleDataTraining([[-1, 1, 1], 0])
+    self.printWeight()
+    # for count in range(0, 1000):
+    #   for data in xor:
+    #     self.singleDataTraining(data)
+    #   print('Round', count)
+
+  def singleDataTraining(self, inputData):
     for levelCount, level in enumerate(self.__PERCEPTRON_MODEL):
       for perceptron in level:
         if levelCount == 0:
@@ -33,7 +48,6 @@ class MultiPerceptron():
     finalOutput = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput()
 
     if not self.checkWeight(inputData[1], finalOutput):
-      print('change weight')
       last = 0
       for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL[::-1]):
         for backPerceptronIndex, backPerceptron in enumerate(level):
@@ -47,9 +61,7 @@ class MultiPerceptron():
               backPerceptron.setBackPropagate(False, last, 0.8)
           backPerceptron.updateWeight()
     
-
     finalOutput1 = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0]
-    print(finalOutput1.getEOutput())
     print(finalOutput1.getWeight())
 
   def getLevelPerceptronOutput(self, perceptronItems):
@@ -80,3 +92,10 @@ class MultiPerceptron():
             }
         })
     return temp
+
+  def printWeight(self):
+    for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL):
+      print('------')
+      for itemIndex, item in enumerate(level):
+        print('level:', levelIndex, 'weight:', itemIndex)
+        print(item.getWeight())
