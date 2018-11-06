@@ -8,15 +8,15 @@ class MultiPerceptronItem():
         
         self.__DATA = []
         # self.__EOutput = -100
-        self.__LEARN_RATE = 0.5
+        self.__LEARN_RATE = 0.01
         self.__BACK_PROPAGATE = 0
 
     def setInputData(self, inputData):
         self.__DATA = inputData
         self.__DATA_LENGTH = len(inputData[0]) - 1
         self.__DATA_LENGTH_WITH_PREFIX = len(inputData[0])
-        self.setEOutput()
         # self.randomWeight()
+        self.setEOutput()
 
     def setEOutput(self):
         expNum = np.dot(self.__DATA[0], self.__W)
@@ -30,7 +30,6 @@ class MultiPerceptronItem():
         self.__W = []
         for count in range(0, self.__DATA_LENGTH_WITH_PREFIX):
             self.__W.append( random.uniform(-1, 1) )
-        # self.__W = [-1.2, 1, 1]
 
     def getWeight(self):
         return self.__W

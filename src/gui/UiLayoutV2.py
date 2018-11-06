@@ -6,8 +6,8 @@ else:
     import tkinter as tk
     from tkinter import ttk
 
-from src.figure.figurePlt import figurePlt
 from src.figure.FigurePltV2 import FigurePltV2
+from src.nerual.MultiPerceptron import MultiPerceptron
 
 class UiLayoutV2():
   def __init__(self):
@@ -24,6 +24,13 @@ class UiLayoutV2():
     self.__WINDOW.mainloop()
 
   def _startCalcu(self):
+    a = MultiPerceptron()
+    data, weight = a.startTraining()
+    print(data)
+    print(data[0])
+    self.__FIGURE_PLT.clearPLT()
+    self.__FIGURE_PLT.updateFigurePoint(data, True)
+    self.__FIGURE_PLT.updateFigureLine(weight)
     print('_startCalcu')
 
   def _component(self):

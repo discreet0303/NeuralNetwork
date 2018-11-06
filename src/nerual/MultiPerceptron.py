@@ -1,11 +1,15 @@
 from src.nerual.MultiPerceptronItem import MultiPerceptronItem
 
+import numpy as np
+import math
 class MultiPerceptron():
 
   def __init__(self):
     print('MultiPerceptron')
     self.__LEVEL = 2
     self.__ITEM = 2
+
+    self.__ERROR = 0
 
     self.__PERCEPTRON_MODEL = []
     for level in range(0, self.__LEVEL - 1):
@@ -20,23 +24,70 @@ class MultiPerceptron():
     self.__PERCEPTRON_MODEL[1][0].setWeight([0.5, 0.4, 0.8])
 
     # self.checkWeight(0, 0.4)
-
+  def sig(self, data, w):
+      expNum = np.dot(data, w)
+      sigmoidalNum = round( 1 / (1 + math.exp(-1 * expNum)), 3 )
+      print(sigmoidalNum)
+  
   def startTraining(self):
     xor = [
       [[-1, 1, 1], 0],
+      [[-1, 1, 0], 1],
       [[-1, 0, 0], 0],
       [[-1, 0, 1], 1],
-      [[-1, 1, 0], 1],
     ]
 
-    self.singleDataTraining([[-1, 1, 1], 0])
-    self.printWeight()
-    # for count in range(0, 1000):
+    for i in range(10000):
+      for data in xor:
+        self.singleDataTraining(data)
+    # for i in range(0, 4):
+    #   self.singleDataTraining(xor[0])
+      # self.printWeight()
+      # print('end 1:', i)
+    # self.singleDataTraining(xor[0])
+    # self.printWeight()
+    # print('1 end')
+    # print('2 before ------------')
+    # self.printWeight()
+    # self.singleDataTraining(xor[1])
+    # self.printWeight()
+    # print('2 end')
+    # self.singleDataTraining(xor[2])
+    # self.printWeight()
+    # print('3 end')
+    # self.singleDataTraining(xor[3])
+    # self.printWeight()
+    # print('1 end')
+
+
+
+    # for count in range(0, 100):
+    #   err = 0
     #   for data in xor:
-    #     self.singleDataTraining(data)
-    #   print('Round', count)
+    #     if self.singleDataTraining(data):
+    #       err += 1
+    #   self.__ERROR = 0
+    # data1 = []
+    # answer = []
+    # w = [
+    #   [-1.198, 0.912, 1.179],
+    #   [0.294, 0.826, 0.98],
+    #   [0.216, 0.384, -0.189],
+    # ]
+    # for i in xor:
+    #   # x = self.calcu(i[0], self.__PERCEPTRON_MODEL[0][0].getWeight())
+    #   # y = self.calcu(i[0], self.__PERCEPTRON_MODEL[0][1].getWeight())
+    #   x = self.calcu(i[0], w[0])
+    #   y = self.calcu(i[0], w[1])
+    #   data1.append([[x, y],i[1]])
+
+    # return data1, w[2]
 
   def singleDataTraining(self, inputData):
+    print('inputData: ', inputData)
+    print('start weight w1: ', self.__PERCEPTRON_MODEL[0][0].getWeight())
+    print('start weight w2: ', self.__PERCEPTRON_MODEL[0][1].getWeight())
+    print('start weight w3: ', self.__PERCEPTRON_MODEL[1][0].getWeight())
     for levelCount, level in enumerate(self.__PERCEPTRON_MODEL):
       for perceptron in level:
         if levelCount == 0:
@@ -44,10 +95,21 @@ class MultiPerceptron():
         else:
           eOutput = self.getLevelPerceptronOutput(self.__PERCEPTRON_MODEL[levelCount - 1])
           perceptron.setInputData([eOutput, inputData[1]])
+          # print('eoutput')
+          # print(eOutput)
     
-    finalOutput = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput()
+    print('output w1: ', self.__PERCEPTRON_MODEL[0][0].getEOutput())
+    print('output w2: ', self.__PERCEPTRON_MODEL[0][1].getEOutput())
+    print('output w3: ', self.__PERCEPTRON_MODEL[1][0].getEOutput())
+    self.sig(
+      [-1, self.__PERCEPTRON_MODEL[0][0].getEOutput(),
+      self.__PERCEPTRON_MODEL[0][1].getEOutput()], self.__PERCEPTRON_MODEL[1][0].getWeight())
 
+
+    finalOutput = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput()
+    self.__ERROR = self.__ERROR + 0.5 * (inputData[1] - finalOutput) ** 2
     if not self.checkWeight(inputData[1], finalOutput):
+      print('changing Weight')
       last = 0
       for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL[::-1]):
         for backPerceptronIndex, backPerceptron in enumerate(level):
@@ -60,9 +122,21 @@ class MultiPerceptron():
             elif backPerceptronIndex == 1:
               backPerceptron.setBackPropagate(False, last, 0.8)
           backPerceptron.updateWeight()
+      
+    print('end weight w1: ', self.__PERCEPTRON_MODEL[0][0].getWeight())
+    print('end weight w2: ', self.__PERCEPTRON_MODEL[0][1].getWeight())
+    print('end weight w3: ', self.__PERCEPTRON_MODEL[1][0].getWeight())
+    print("W1 BackPropagate: ", self.__PERCEPTRON_MODEL[0][0].getBackPropagate())
+    print("W2 BackPropagate: ", self.__PERCEPTRON_MODEL[0][1].getBackPropagate())
+    print("W3 BackPropagate: ", self.__PERCEPTRON_MODEL[1][0].getBackPropagate())
+    print('======================================================================')
+      # print(self.__ERROR)
+      # print(inputData)
+    #   return True
+    # return False
     
-    finalOutput1 = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0]
-    print(finalOutput1.getWeight())
+    # finalOutput1 = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0]
+    # self.__ERROR = self.__ERROR + 0.5 * (inputData[1] - finalOutput1.getEOutput()) ** 2
 
   def getLevelPerceptronOutput(self, perceptronItems):
     eLevelOutputData = [-1]
@@ -93,9 +167,17 @@ class MultiPerceptron():
         })
     return temp
 
+  def calcu(self, inputData, weight):
+    temp1 = inputData[1] * weight[1]
+    temp2 = inputData[2] * weight[2]
+    expNum = temp1 + temp2 - weight[0]
+    sigmoidalNum = 1 / (1 + math.exp(-1 * expNum))
+    return sigmoidalNum
+
   def printWeight(self):
     for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL):
       print('------')
       for itemIndex, item in enumerate(level):
         print('level:', levelIndex, 'weight:', itemIndex)
         print(item.getWeight())
+    print(self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput())

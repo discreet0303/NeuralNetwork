@@ -16,24 +16,43 @@ class FigurePltV2():
     self.figure2dOr3d(True)
 
     self.__FIG.tight_layout()
-    graph = FigureCanvasTkAgg(self.__FIG, master = self.__WINDOW)
-    canvas = graph.get_tk_widget()
-    canvas.grid(
+    self.__CANVAS = FigureCanvasTkAgg(self.__FIG, master = self.__WINDOW)
+
+    self.__CANVAS.get_tk_widget().grid(
       row = 0, 
       column = 0, 
       rowspan = 40, 
       columnspan = 5, 
       sticky='W'
     )
-    graph.draw()
+    
+    self.__CANVAS.draw()
 
-    # n = 100
+  def clearPLT(self):
+    self.__TRAINING_PLT.cla()
 
-    # for c, m, zlow, zhigh in [('r', 'o', -50, -25), ('b', '^', -30, -5)]:
-    #     xs = self.randrange(n, 23, 32)
-    #     ys = self.randrange(n, 0, 100)
-    #     zs = self.randrange(n, zlow, zhigh)
-    #     self.__TEST_PLT.scatter(xs, ys, zs, c=c, marker=m)
+  def updateFigureLine(self, answer):
+    x = np.linspace(-5, 5)
+    y = (answer[0] / answer[2]) - (answer[1] / answer[2]) * x
+    self.__TRAINING_PLT.plot(x, y)
+
+  def updateFigurePoint(self, data, is2d):
+    if is2d:
+      for i in data:
+        if i[1] == 0:
+          color = 'b'
+        else:
+          color = 'c'
+        self.__TRAINING_PLT.scatter(i[0][0], i[0][1], c=color, marker='.')
+    else:
+      for i in data:
+        if i[1] == 0:
+          color = 'b'
+        else:
+          color = 'c'
+        self.__TRAINING_PLT.scatter(i[0][0], i[0][1], i[0][2], c=color, marker='.')
+    
+    self.__CANVAS.draw()
 
   def figure2dOr3d(self, is2d):
     if not is2d:
