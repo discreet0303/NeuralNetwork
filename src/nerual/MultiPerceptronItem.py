@@ -8,7 +8,7 @@ class MultiPerceptronItem():
         
         self.__DATA = []
         # self.__EOutput = -100
-        self.__LEARN_RATE = 0.01
+        self.__LEARN_RATE = 0.5
         self.__BACK_PROPAGATE = 0
 
     def setInputData(self, inputData):
@@ -24,6 +24,7 @@ class MultiPerceptronItem():
         self.__EOutput = sigmoidalNum
     
     def getEOutput(self):
+        return round(self.__EOutput, 4)
         return self.__EOutput
 
     def randomWeight(self):
@@ -39,9 +40,11 @@ class MultiPerceptronItem():
 
     def setBackPropagate(self, outputLevel, preBackPropagate, weightValue):
         if outputLevel:
-            self.__BACK_PROPAGATE = (self.__DATA[1] - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
+            self.__BACK_PROPAGATE = (weightValue - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
+            # self.__BACK_PROPAGATE = (self.__DATA[1] - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
         else:
             self.__BACK_PROPAGATE = self.__EOutput * (1 - self.__EOutput) * preBackPropagate * weightValue
+        self.__BACK_PROPAGATE = round(self.__BACK_PROPAGATE, 4)
 
     def getBackPropagate(self):
         return self.__BACK_PROPAGATE
@@ -51,7 +54,13 @@ class MultiPerceptronItem():
 
         for index, item in enumerate(self.__W):
             val = item + self.__LEARN_RATE * self.__BACK_PROPAGATE * self.__DATA[0][index]
-            temp.append(val)
+            # print('weight')
+            # print(item)
+            # print(self.__BACK_PROPAGATE)
+            # print(self.__DATA[0][index])
+            # print(round(val, 3))
+            # print('weight..')
+            temp.append(round(val, 3))
         
         self.__W = temp
 

@@ -23,7 +23,7 @@ class UiLayout:
 
         self._component()
 
-        self.__FIGURE_PLT = figurePlt(self.__WINDOW, 2, -2)
+        self.__FIGURE_PLT = figurePlt(self.__WINDOW, 2, -2, 1, 'title')
 
         self.__WINDOW.mainloop()
 

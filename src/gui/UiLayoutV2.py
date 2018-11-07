@@ -26,8 +26,11 @@ class UiLayoutV2():
   def _startCalcu(self):
     a = MultiPerceptron()
     data, weight = a.startTraining()
-    print(data)
     print(data[0])
+    print(data[1])
+    print(data[2])
+    print(data[3])
+    print(weight)
     self.__FIGURE_PLT.clearPLT()
     self.__FIGURE_PLT.updateFigurePoint(data, True)
     self.__FIGURE_PLT.updateFigureLine(weight)

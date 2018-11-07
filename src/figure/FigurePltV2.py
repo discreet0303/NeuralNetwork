@@ -32,9 +32,10 @@ class FigurePltV2():
     self.__TRAINING_PLT.cla()
 
   def updateFigureLine(self, answer):
-    x = np.linspace(-5, 5)
+    x = np.linspace(-0.1, 1.1)
     y = (answer[0] / answer[2]) - (answer[1] / answer[2]) * x
     self.__TRAINING_PLT.plot(x, y)
+    self.__CANVAS.draw()
 
   def updateFigurePoint(self, data, is2d):
     if is2d:
