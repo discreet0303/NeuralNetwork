@@ -6,8 +6,9 @@ class File():
         self.__BASE_DIR_PATH = os.getcwd()
         self.__DATASET_DIR_PATH = os.path.join(self.__BASE_DIR_PATH, 'dataSet')
 
-    def getFileContentV2(self):
-        filePath = os.path.join(self.__DATASET_DIR_PATH, '2Circle1.txt')
+    def getFileContentV2(self, fileName):
+        # filePath = os.path.join(self.__DATASET_DIR_PATH, '2Circle1.txt')
+        filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
 
         with open(filePath, 'r') as dataSet:
             originData = dataSet.read().split('\n')
@@ -29,9 +30,6 @@ class File():
             
             dataArr.append([arr, eVal])
 
-        # print(dataArr)
-        print('eValList')
-        print(eValList)
         return dataArr, eValList
 
 
@@ -84,7 +82,7 @@ class File():
         return dataArr
 
     def getDataSetFileName(self):
-        disableName = ['IRIS.TXT', 'perceptron4.txt', 'perceptron3.txt', 'xor.txt', 'wine.txt', 'C3D.TXT', '4satellite-6.txt', 'Number.txt', '8OX.TXT', '5CloseS1.txt', 'C10D.TXT']
+        disableName = ['IRIS.TXT', 'perceptron4.txt', 'wine.txt', '4satellite-6.txt', 'Number.txt', '8OX.TXT', '5CloseS1.txt', 'C10D.TXT']
 
         dataFileArr = []
         for dataFile in os.listdir('./dataSet'):

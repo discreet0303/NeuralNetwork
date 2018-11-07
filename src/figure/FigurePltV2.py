@@ -25,11 +25,8 @@ class FigurePltV2():
       columnspan = 5, 
       sticky='W'
     )
-    
     self.__CANVAS.draw()
 
-  def clearPLT(self):
-    self.__TRAINING_PLT.cla()
 
   def updateFigureLine(self, answer):
     x = np.linspace(-0.1, 1.1)
@@ -55,17 +52,52 @@ class FigurePltV2():
     
     self.__CANVAS.draw()
 
+  def updateTestPoint(self, inputData):
+    dataLen = len(inputData[0][0]) - 1
+    if dataLen == 3:
+      self.figure2dOr3d(False)
+
+    for point in inputData:
+      pos = point[0]
+      eVal = point[1]
+      if eVal == 0:
+        color = 'b'
+      elif eVal == 1:
+        color = 'g'
+      elif eVal == 2:
+        color = 'r'
+      elif eVal == 3:
+        color = 'c'
+      elif eVal == 4:
+        color = 'm'
+      else:
+        color = 'g'
+      
+      if dataLen == 2: 
+        self.__TEST_PLT.scatter(pos[1], pos[2], c = color, marker='.')
+      elif dataLen == 3: 
+        self.__TEST_PLT.scatter(pos[1], pos[2], pos[3], c = color, marker='.')
+    self.__CANVAS.draw()
+
+  def clearPlt(self, name):
+    if name == 'test':
+      self.__TEST_PLT.cla()
+      self.__TEST_PLT.set_title('Test')
+    elif name == 'train':
+      self.__TRAINING_PLT.cla()
+      self.__TRAINING_PLT.set_title('Training')
+
   def figure2dOr3d(self, is2d):
     if not is2d:
       self.__TEST_PLT = self.__FIG.add_subplot(211, projection='3d')
-      self.__TEST_PLT.set_title('Test Model')
-      self.__TRAINING_PLT = self.__FIG.add_subplot(212, projection='3d')
-      self.__TRAINING_PLT.set_title('Training Model')
+      self.__TEST_PLT.set_title('Test')
+      # self.__TRAINING_PLT = self.__FIG.add_subplot(212, projection='3d')
+      # self.__TRAINING_PLT.set_title('Training Model')
     else:
       self.__TEST_PLT = self.__FIG.add_subplot(211)
-      self.__TEST_PLT.set_title('Test Model')
-      self.__TRAINING_PLT = self.__FIG.add_subplot(212)
-      self.__TRAINING_PLT.set_title('Training Model')
+      self.__TEST_PLT.set_title('Test')
+    self.__TRAINING_PLT = self.__FIG.add_subplot(212)
+    self.__TRAINING_PLT.set_title('Training')
 
   def randrange(self, n, vmin, vmax):
     return (vmax - vmin)*np.random.rand(n) + vmin

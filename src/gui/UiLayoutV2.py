@@ -19,25 +19,29 @@ class UiLayoutV2():
     self.__WINDOW.protocol("WM_DELETE_WINDOW", self._closeWindow)
     
     self.__FIGURE_PLT = FigurePltV2(self.__WINDOW)
-    
+    self.__FILE = File()
     self._component()
     
     self.__WINDOW.mainloop()
 
   def startCalcu(self):
-    files = File()
-    inputData, eValList = files.getFileContentV2()
-    a = MultiPerceptron()
-    # inputData = [
-    #   [[-1, 0, 0], 0],
-    #   [[-1, 0, 1], 1],
-    #   [[-1, 1, 0], 1],
-    #   [[-1, 1, 1], 0],
-    # ]
-    data, weight = a.startTraining(inputData, eValList)
-    self.__FIGURE_PLT.clearPLT()
-    self.__FIGURE_PLT.updateFigurePoint(data, True)
-    self.__FIGURE_PLT.updateFigureLine(weight)
+    # setting learnRate endTime
+    # learnRate = self.learnRate_tf.get()
+    # endTime = self.endCondition_tf.get()
+
+    fileName = self.fileOptionValue.get()
+    inputData, eValList = self.__FILE.getFileContentV2(fileName)
+    
+    self.__FIGURE_PLT.clearPlt('test')
+    self.__FIGURE_PLT.updateTestPoint(inputData)
+
+    # files = File()
+    # inputData, eValList = files.getFileContentV2()
+    # a = MultiPerceptron()
+    # data, weight = a.startTraining(inputData, eValList)
+    # self.__FIGURE_PLT.clearPLT()
+    # self.__FIGURE_PLT.updateFigurePoint(data, True)
+    # self.__FIGURE_PLT.updateFigureLine(weight)
     print('startCalcu')
 
   def _component(self):
@@ -94,6 +98,24 @@ class UiLayoutV2():
       padx = 5,
       pady = 5,
     )
+
+    fileOptions = self.__FILE.getDataSetFileName()
+    self.fileOptionValue = tk.StringVar(self.__WINDOW)
+    self.fileOptionValue.set(fileOptions[0])
+
+    self.fileOption_lb = tk.Label(
+        self.__WINDOW, 
+        text = '請選擇檔案', 
+        font = ('Arial', 10)
+    )
+    self.fileOption_lb.grid( row = 2, column = 6 )
+
+    self.fileOption_op = tk.OptionMenu(
+        self.__WINDOW, 
+        self.fileOptionValue,
+        *fileOptions
+    )
+    self.fileOption_op.grid( row = 2, column = 7 )
 
     self.testWeight_lb = tk.Label(
       self.__WINDOW, 
