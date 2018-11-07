@@ -8,6 +8,7 @@ else:
 
 from src.figure.FigurePltV2 import FigurePltV2
 from src.nerual.MultiPerceptron import MultiPerceptron
+from src.file.File import File
 
 class UiLayoutV2():
   def __init__(self):
@@ -23,18 +24,21 @@ class UiLayoutV2():
     
     self.__WINDOW.mainloop()
 
-  def _startCalcu(self):
+  def startCalcu(self):
+    files = File()
+    inputData, eValList = files.getFileContentV2()
     a = MultiPerceptron()
-    data, weight = a.startTraining()
-    print(data[0])
-    print(data[1])
-    print(data[2])
-    print(data[3])
-    print(weight)
+    # inputData = [
+    #   [[-1, 0, 0], 0],
+    #   [[-1, 0, 1], 1],
+    #   [[-1, 1, 0], 1],
+    #   [[-1, 1, 1], 0],
+    # ]
+    data, weight = a.startTraining(inputData, eValList)
     self.__FIGURE_PLT.clearPLT()
     self.__FIGURE_PLT.updateFigurePoint(data, True)
     self.__FIGURE_PLT.updateFigureLine(weight)
-    print('_startCalcu')
+    print('startCalcu')
 
   def _component(self):
     self.learnRate_lb = tk.Label(
@@ -64,7 +68,7 @@ class UiLayoutV2():
     self.startCalcu_bt = tk.Button(
       self.__WINDOW, 
       text = "開始", 
-      command = self._startCalcu, 
+      command = self.startCalcu, 
       width = 5,
       height = 3,
     )

@@ -7,6 +7,7 @@ class MultiPerceptronItem():
         print('PerceptronV2')
         
         self.__DATA = []
+        self.__W = []
         # self.__EOutput = -100
         self.__LEARN_RATE = 0.5
         self.__BACK_PROPAGATE = 0
@@ -16,6 +17,8 @@ class MultiPerceptronItem():
         self.__DATA_LENGTH = len(inputData[0]) - 1
         self.__DATA_LENGTH_WITH_PREFIX = len(inputData[0])
         # self.randomWeight()
+        if len(self.__W) != self.__DATA_LENGTH_WITH_PREFIX:
+            self.randomWeight()
         self.setEOutput()
 
     def setEOutput(self):
@@ -54,12 +57,6 @@ class MultiPerceptronItem():
 
         for index, item in enumerate(self.__W):
             val = item + self.__LEARN_RATE * self.__BACK_PROPAGATE * self.__DATA[0][index]
-            # print('weight')
-            # print(item)
-            # print(self.__BACK_PROPAGATE)
-            # print(self.__DATA[0][index])
-            # print(round(val, 3))
-            # print('weight..')
             temp.append(round(val, 3))
         
         self.__W = temp

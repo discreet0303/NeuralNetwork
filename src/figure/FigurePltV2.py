@@ -40,14 +40,14 @@ class FigurePltV2():
   def updateFigurePoint(self, data, is2d):
     if is2d:
       for i in data:
-        if i[1] == 0:
+        if i[1] == 1:
           color = 'b'
         else:
           color = 'c'
         self.__TRAINING_PLT.scatter(i[0][0], i[0][1], c=color, marker='.')
     else:
       for i in data:
-        if i[1] == 0:
+        if i[1] == 1:
           color = 'b'
         else:
           color = 'c'
