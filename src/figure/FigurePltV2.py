@@ -91,8 +91,6 @@ class FigurePltV2():
     if not is2d:
       self.__TEST_PLT = self.__FIG.add_subplot(211, projection='3d')
       self.__TEST_PLT.set_title('Test')
-      # self.__TRAINING_PLT = self.__FIG.add_subplot(212, projection='3d')
-      # self.__TRAINING_PLT.set_title('Training Model')
     else:
       self.__TEST_PLT = self.__FIG.add_subplot(211)
       self.__TEST_PLT.set_title('Test')

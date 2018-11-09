@@ -35,13 +35,11 @@ class UiLayoutV2():
     self.__FIGURE_PLT.clearPlt('test')
     self.__FIGURE_PLT.updateTestPoint(inputData)
 
-    # files = File()
-    # inputData, eValList = files.getFileContentV2()
-    # a = MultiPerceptron()
-    # data, weight = a.startTraining(inputData, eValList)
-    # self.__FIGURE_PLT.clearPLT()
-    # self.__FIGURE_PLT.updateFigurePoint(data, True)
-    # self.__FIGURE_PLT.updateFigureLine(weight)
+    a = MultiPerceptron()
+    data, weight = a.startTraining(inputData, eValList)
+    self.__FIGURE_PLT.clearPlt('train')
+    self.__FIGURE_PLT.updateFigurePoint(data, True)
+    self.__FIGURE_PLT.updateFigureLine(weight)
     print('startCalcu')
 
   def _component(self):
