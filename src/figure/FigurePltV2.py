@@ -14,7 +14,7 @@ class FigurePltV2():
     self.__FIG = Figure(figsize=(4, 8), dpi=96)
     
     self.figure2dOr3d(True)
-
+    self.__COLOR_CODE = ['b', 'g', 'r', 'c', 'm', 'b', 'g', 'r', 'c', 'm']
     self.__FIG.tight_layout()
     self.__CANVAS = FigureCanvasTkAgg(self.__FIG, master = self.__WINDOW)
 
@@ -27,29 +27,23 @@ class FigurePltV2():
     )
     self.__CANVAS.draw()
 
-
   def updateFigureLine(self, answer):
-    x = np.linspace(-0.1, 1.1)
+    self.__TRAINING_PLT.set_xlim(0, 1)
+    x = np.linspace(0, 1.1)
     y = (answer[0] / answer[2]) - (answer[1] / answer[2]) * x
     self.__TRAINING_PLT.plot(x, y)
     self.__CANVAS.draw()
 
   def updateFigurePoint(self, data, is2d):
-    if is2d:
-      for i in data:
-        if i[1] == 1:
-          color = 'b'
-        else:
-          color = 'c'
-        self.__TRAINING_PLT.scatter(i[0][0], i[0][1], c=color, marker='.')
-    else:
-      for i in data:
-        if i[1] == 1:
-          color = 'b'
-        else:
-          color = 'c'
-        self.__TRAINING_PLT.scatter(i[0][0], i[0][1], i[0][2], c=color, marker='.')
-    
+    for point in data:
+      pos = point[0]
+      eVal = point[1]
+      color = self.__COLOR_CODE[int(eVal)]
+      if is2d:
+        self.__TRAINING_PLT.scatter(pos[0], pos[1], c = color, marker = '.')
+      else:
+        self.__TRAINING_PLT.scatter(pos[0], pos[1], pos[2], c = color, marker = '.')
+    self.__TRAINING_PLT.set_xlim(0, 1)
     self.__CANVAS.draw()
 
   def updateTestPoint(self, inputData):
@@ -60,19 +54,8 @@ class FigurePltV2():
     for point in inputData:
       pos = point[0]
       eVal = point[1]
-      if eVal == 0:
-        color = 'b'
-      elif eVal == 1:
-        color = 'g'
-      elif eVal == 2:
-        color = 'r'
-      elif eVal == 3:
-        color = 'c'
-      elif eVal == 4:
-        color = 'm'
-      else:
-        color = 'g'
-      
+      color = self.__COLOR_CODE[int(eVal)]
+
       if dataLen == 2: 
         self.__TEST_PLT.scatter(pos[1], pos[2], c = color, marker='.')
       elif dataLen == 3: 
@@ -86,16 +69,18 @@ class FigurePltV2():
     elif name == 'train':
       self.__TRAINING_PLT.cla()
       self.__TRAINING_PLT.set_title('Training')
+    self.__TRAINING_PLT.set_xlim(0, 1)
 
   def figure2dOr3d(self, is2d):
     if not is2d:
       self.__TEST_PLT = self.__FIG.add_subplot(211, projection='3d')
-      self.__TEST_PLT.set_title('Test')
     else:
       self.__TEST_PLT = self.__FIG.add_subplot(211)
-      self.__TEST_PLT.set_title('Test')
+
+    self.__TEST_PLT.set_title('Test')
     self.__TRAINING_PLT = self.__FIG.add_subplot(212)
     self.__TRAINING_PLT.set_title('Training')
+    self.__TRAINING_PLT.set_xlim(0, 1)
 
   def randrange(self, n, vmin, vmax):
     return (vmax - vmin)*np.random.rand(n) + vmin

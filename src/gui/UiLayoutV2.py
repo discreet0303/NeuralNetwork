@@ -40,6 +40,12 @@ class UiLayoutV2():
     self.__FIGURE_PLT.clearPlt('train')
     self.__FIGURE_PLT.updateFigurePoint(data, True)
     self.__FIGURE_PLT.updateFigureLine(weight)
+
+    trainCorrectRate = a.getDataCorrectRate(inputData)
+    print(trainCorrectRate)
+    print(len(inputData))
+    trainCorrectRate = trainCorrectRate / len(inputData) * 100
+    self.showTrainingRate_lb_var.set('訓練辨識率: ' + str(trainCorrectRate) + '%')
     print('startCalcu')
 
   def _component(self):
@@ -115,6 +121,24 @@ class UiLayoutV2():
     )
     self.fileOption_op.grid( row = 2, column = 7 )
 
+    self.showTestingRate_lb_var = tk.StringVar()
+    self.showTestingRate_lb_var.set('測試辨識率: 無')
+    showTestingRate_lb = tk.Label(
+        self.__WINDOW, 
+        textvariable = self.showTestingRate_lb_var, 
+        font = ('Arial', 10)
+    )
+    showTestingRate_lb.grid( row = 6, column = 6, columnspan = 10, sticky = 'W' )
+
+    self.showTrainingRate_lb_var = tk.StringVar()
+    self.showTrainingRate_lb_var.set('訓練辨識率: 無')
+    showTrainingRate_lb = tk.Label(
+        self.__WINDOW, 
+        textvariable = self.showTrainingRate_lb_var, 
+        font = ('Arial', 10)
+    )
+    showTrainingRate_lb.grid( row = 7, column = 6, columnspan = 10, sticky = 'W' )
+
     self.testWeight_lb = tk.Label(
       self.__WINDOW, 
       text = '訓練前 Weight', 
@@ -149,7 +173,7 @@ class UiLayoutV2():
     self.trainingWeight_tv.heading('Value', text='Value')
     self.trainingWeight_tv.column('Value', anchor='center', width = 200)
     self.trainingWeight_tv.grid( 
-      row = 30, 
+      row = 30,
       column = 6,
       rowspan = 10,
       columnspan = 5,

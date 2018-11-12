@@ -3,20 +3,17 @@ import numpy as np
 import math
 
 class MultiPerceptronItem():
+    
     def __init__(self):
-        print('PerceptronV2')
-        
         self.__DATA = []
         self.__W = []
-        # self.__EOutput = -100
-        self.__LEARN_RATE = 0.5
+        self.__LEARN_RATE = 0.01
         self.__BACK_PROPAGATE = 0
 
     def setInputData(self, inputData):
         self.__DATA = inputData
         self.__DATA_LENGTH = len(inputData[0]) - 1
         self.__DATA_LENGTH_WITH_PREFIX = len(inputData[0])
-        # self.randomWeight()
         if len(self.__W) != self.__DATA_LENGTH_WITH_PREFIX:
             self.randomWeight()
         self.setEOutput()
@@ -44,11 +41,8 @@ class MultiPerceptronItem():
     def setBackPropagate(self, outputLevel, preBackPropagate, weightValue):
         if outputLevel:
             self.__BACK_PROPAGATE = (weightValue - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
-            # self.__BACK_PROPAGATE = (self.__DATA[1] - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
         else:
             self.__BACK_PROPAGATE = self.__EOutput * (1 - self.__EOutput) * preBackPropagate * weightValue
-        self.__BACK_PROPAGATE = round(self.__BACK_PROPAGATE, 4)
-
     def getBackPropagate(self):
         return self.__BACK_PROPAGATE
 
@@ -57,7 +51,6 @@ class MultiPerceptronItem():
 
         for index, item in enumerate(self.__W):
             val = item + self.__LEARN_RATE * self.__BACK_PROPAGATE * self.__DATA[0][index]
-            temp.append(round(val, 3))
-        
+            temp.append(val)
         self.__W = temp
 
