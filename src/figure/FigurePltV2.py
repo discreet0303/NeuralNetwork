@@ -28,10 +28,11 @@ class FigurePltV2():
     self.__CANVAS.draw()
 
   def updateFigureLine(self, answer):
-    self.__TRAINING_PLT.set_xlim(0, 1)
     x = np.linspace(0, 1.1)
     y = (answer[0] / answer[2]) - (answer[1] / answer[2]) * x
     self.__TRAINING_PLT.plot(x, y)
+    self.__TRAINING_PLT.set_xlim(0, 1)
+    self.__TRAINING_PLT.set_ylim(0, 1)
     self.__CANVAS.draw()
 
   def updateFigurePoint(self, data, is2d):
@@ -44,6 +45,7 @@ class FigurePltV2():
       else:
         self.__TRAINING_PLT.scatter(pos[0], pos[1], pos[2], c = color, marker = '.')
     self.__TRAINING_PLT.set_xlim(0, 1)
+    self.__TRAINING_PLT.set_ylim(0, 1)
     self.__CANVAS.draw()
 
   def updateTestPoint(self, inputData):
@@ -64,12 +66,14 @@ class FigurePltV2():
 
   def clearPlt(self, name):
     if name == 'test':
+      self.__TEST_PLT = self.__FIG.add_subplot(211)
       self.__TEST_PLT.cla()
       self.__TEST_PLT.set_title('Test')
     elif name == 'train':
       self.__TRAINING_PLT.cla()
       self.__TRAINING_PLT.set_title('Training')
-    self.__TRAINING_PLT.set_xlim(0, 1)
+      self.__TRAINING_PLT.set_xlim(0, 1)
+      self.__TRAINING_PLT.set_ylim(0, 1)
 
   def figure2dOr3d(self, is2d):
     if not is2d:
@@ -81,6 +85,7 @@ class FigurePltV2():
     self.__TRAINING_PLT = self.__FIG.add_subplot(212)
     self.__TRAINING_PLT.set_title('Training')
     self.__TRAINING_PLT.set_xlim(0, 1)
+    self.__TRAINING_PLT.set_ylim(0, 1)
 
   def randrange(self, n, vmin, vmax):
     return (vmax - vmin)*np.random.rand(n) + vmin

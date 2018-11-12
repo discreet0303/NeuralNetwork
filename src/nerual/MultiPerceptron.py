@@ -9,7 +9,7 @@ class MultiPerceptron():
     self.__LEVEL = 2
     self.__ITEM = 2
 
-    self.__END_ROUND = 10
+    self.__END_ROUND = 2000
     
     self.__ERROR = 0
 
@@ -21,6 +21,10 @@ class MultiPerceptron():
       self.__PERCEPTRON_MODEL.append(temp)
     self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
 
+    # self.__PERCEPTRON_MODEL[0][0].setWeight([-1.2,1,1])
+    # self.__PERCEPTRON_MODEL[0][1].setWeight([0.3,1,1])
+    # self.__PERCEPTRON_MODEL[1][0].setWeight([0.5,0.4,0.8])
+
   def startTraining(self, inputData, eValList):
     self.setRegexEValue(eValList)
 
@@ -28,17 +32,18 @@ class MultiPerceptron():
       self.__ERROR = 0
       for data in inputData:
         self.singleDataTraining(data)
-      print("Count: ", count, '=> ', self.__ERROR)
+      # print("Count: ", count, '=> ', self.__ERROR)
         
+    # self.printWeight()
     transPoint = []
     for pos in inputData:
       eVal = pos[1]
-      x = self.calcu(pos[0], self.__PERCEPTRON_MODEL[0][0].getWeight())
-      y = self.calcu(pos[0], self.__PERCEPTRON_MODEL[0][1].getWeight())
+      x = self.calcu(pos[0], self.__PERCEPTRON_MODEL[self.__LEVEL - 2][0].getWeight())
+      y = self.calcu(pos[0], self.__PERCEPTRON_MODEL[self.__LEVEL - 2][1].getWeight())
 
       transPoint.append([[x, y], eVal])
 
-    return transPoint, self.__PERCEPTRON_MODEL[1][0].getWeight()
+    return transPoint, self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getWeight()
 
   def singleDataTraining(self, inputData):
     pos = inputData[0]
@@ -56,18 +61,24 @@ class MultiPerceptron():
     middleVal = regexE[eVal]['middleVal']
     # 均方誤差
     self.__ERROR = self.__ERROR + 0.5 * (finalOutput - middleVal) ** 2
-    # back propagate
+
     if not self.checkWeight(eVal, finalOutput):
-      last = 0
-      weight = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getWeight()
+      allModelWeight = self.getAllModelWeight()
+      allBackPropagate = []
       for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL[::-1]):
-        for backPerceptronIndex, backPerceptron in enumerate(level):
-          if levelIndex == 0:
-            backPerceptron.setBackPropagate(True, 0, middleVal)
-            last = backPerceptron.getBackPropagate()
-          else:
-            backPerceptron.setBackPropagate(False, last, weight[backPerceptronIndex + 1])
-          backPerceptron.updateWeight()
+        if levelIndex == 0:
+          level[0].setBackPropagate(True, 0, middleVal, 0)
+          allBackPropagate.append([level[0].getBackPropagate()])
+        else:
+          levelBackPropagate = []
+          prevWeight = allModelWeight[self.__LEVEL - levelIndex]
+          for backPerceptronIndex, backPerceptron in enumerate(level):
+            backPerceptron.setBackPropagate(False, allBackPropagate[0], prevWeight, backPerceptronIndex)
+            levelBackPropagate.append(backPerceptron.getBackPropagate())
+          allBackPropagate = [levelBackPropagate] + allBackPropagate
+      for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL):
+        for perceptronIndex, perceptron in enumerate(level):
+          perceptron.updateWeight()
 
   def getLevelPerceptronOutput(self, perceptronItems):
     eLevelOutputData = [-1]
@@ -99,7 +110,6 @@ class MultiPerceptron():
       })
     self.__REGEX_E_VALUE = temp
 
-
   def getRegexEValue(self):
     return self.__REGEX_E_VALUE
 
@@ -107,6 +117,15 @@ class MultiPerceptron():
     expNum = np.dot(inputData, weight)
     sigmoidalNum = 1 / (1 + math.exp(-1 * expNum))
     return sigmoidalNum
+
+  def getAllModelWeight(self):
+    data = []
+    for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL):
+      temp = []
+      for itemIndex, item in enumerate(level):
+        temp.append(item.getWeight())
+      data.append(temp)
+    return data
 
   def printWeight(self):
     for levelIndex, level in enumerate(self.__PERCEPTRON_MODEL):
@@ -118,7 +137,6 @@ class MultiPerceptron():
 
   def getDataCorrectRate(self, inputData):
     regexE = self.getRegexEValue()
-    
     count = 0
     for data in inputData:
       point = data[0]
@@ -137,5 +155,4 @@ class MultiPerceptron():
 
       if self.checkWeight(eVal, finalOutput):
         count += 1
-
     return count

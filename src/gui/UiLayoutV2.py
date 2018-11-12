@@ -36,14 +36,13 @@ class UiLayoutV2():
     self.__FIGURE_PLT.updateTestPoint(inputData)
 
     a = MultiPerceptron()
+    a.startTraining(inputData, eValList)
     data, weight = a.startTraining(inputData, eValList)
     self.__FIGURE_PLT.clearPlt('train')
     self.__FIGURE_PLT.updateFigurePoint(data, True)
     self.__FIGURE_PLT.updateFigureLine(weight)
 
     trainCorrectRate = a.getDataCorrectRate(inputData)
-    print(trainCorrectRate)
-    print(len(inputData))
     trainCorrectRate = trainCorrectRate / len(inputData) * 100
     self.showTrainingRate_lb_var.set('訓練辨識率: ' + str(trainCorrectRate) + '%')
     print('startCalcu')
@@ -138,6 +137,15 @@ class UiLayoutV2():
         font = ('Arial', 10)
     )
     showTrainingRate_lb.grid( row = 7, column = 6, columnspan = 10, sticky = 'W' )
+
+    self.showRMSERate_lb_var = tk.StringVar()
+    self.showRMSERate_lb_var.set('均方根誤差: 無')
+    showRMSERate_lb = tk.Label(
+        self.__WINDOW, 
+        textvariable = self.showRMSERate_lb_var, 
+        font = ('Arial', 10)
+    )
+    showRMSERate_lb.grid( row = 8, column = 6, columnspan = 10, sticky = 'W' )
 
     self.testWeight_lb = tk.Label(
       self.__WINDOW, 

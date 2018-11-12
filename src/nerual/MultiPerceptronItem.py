@@ -38,11 +38,17 @@ class MultiPerceptronItem():
     def setWeight(self, w):
         self.__W = w
 
-    def setBackPropagate(self, outputLevel, preBackPropagate, weightValue):
+    def setBackPropagate(self, outputLevel, preBackPropagate, weightValue, weightIndex):
         if outputLevel:
             self.__BACK_PROPAGATE = (weightValue - self.__EOutput) * self.__EOutput * (1 - self.__EOutput)
         else:
-            self.__BACK_PROPAGATE = self.__EOutput * (1 - self.__EOutput) * preBackPropagate * weightValue
+            sumTemp = 0
+            for backPropagate in preBackPropagate:
+                for weight in weightValue:
+                    sumTemp += backPropagate * weight[weightIndex + 1]
+            self.__BACK_PROPAGATE = self.__EOutput * (1 - self.__EOutput) * sumTemp
+            # self.__BACK_PROPAGATE = self.__EOutput * (1 - self.__EOutput) * preBackPropagate * weightValue
+            
     def getBackPropagate(self):
         return self.__BACK_PROPAGATE
 
