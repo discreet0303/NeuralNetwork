@@ -16,13 +16,13 @@ class UiLayoutV2():
     self.__WINDOW = tk.Tk()
     self.__WINDOW.title("Neural Network HW_02")
     self.__WINDOW.resizable(0, 0)
-    self.__WINDOW.geometry("740x775+100+100")
+    self.__WINDOW.geometry("1000x775+100+100")
     self.__WINDOW.protocol("WM_DELETE_WINDOW", self._closeWindow)
     
     self.__FIGURE_PLT = FigurePltV2(self.__WINDOW)
     self.__FILE = File()
     self._component()
-    
+    self.bitNum25()
     self.__WINDOW.mainloop()
 
   def startCalcu(self):
@@ -71,6 +71,28 @@ class UiLayoutV2():
       del dataForTraining[index]
 
     return dataForTraining, dataForTesting
+
+  def rbDeselect(self):
+    print('rbDeselect')
+    self.bitNum00_rb.deselect()
+
+  def bitNum25(self):
+    var00 = tk.IntVar()
+    self.bitNum00_rb = tk.Checkbutton(self.__WINDOW, variable = var00, command = self.changeCheckboxVal)
+    self.bitNum00_rb.grid(row = 9, column = 6)
+    
+    var01 = tk.IntVar()
+    self.bitNum01_rb = tk.Radiobutton(self.__WINDOW, variable=var01, value=1, command = self.rbDeselect)
+    self.bitNum01_rb.grid(row = 9, column = 7)
+
+    var02 = tk.IntVar()
+    self.bitNum02_rb = tk.Radiobutton(self.__WINDOW, variable=var02, value=2, command = self.rbDeselect)
+    self.bitNum02_rb.grid(row = 9, column = 8)
+
+    var03 = tk.IntVar()
+    self.bitNum03_rb = tk.Radiobutton(self.__WINDOW, variable=var03, value=2, command = self.rbDeselect)
+    self.bitNum03_rb.grid(row = 9, column = 9)
+
 
   def _component(self):
     self.learnRate_lb = tk.Label(
