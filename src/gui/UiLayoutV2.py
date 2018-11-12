@@ -6,6 +6,7 @@ else:
     import tkinter as tk
     from tkinter import ttk
 
+import random
 from src.figure.FigurePltV2 import FigurePltV2
 from src.nerual.MultiPerceptron import MultiPerceptron
 from src.file.File import File
@@ -36,16 +37,40 @@ class UiLayoutV2():
     self.__FIGURE_PLT.updateTestPoint(inputData)
 
     a = MultiPerceptron()
-    a.startTraining(inputData, eValList)
-    data, weight = a.startTraining(inputData, eValList)
+    testingData, trainingData = self.randomDataTo2Array(inputData)
+    data, weight = a.startTraining(testingData, eValList)
     self.__FIGURE_PLT.clearPlt('train')
     self.__FIGURE_PLT.updateFigurePoint(data, True)
     self.__FIGURE_PLT.updateFigureLine(weight)
 
-    trainCorrectRate = a.getDataCorrectRate(inputData)
-    trainCorrectRate = trainCorrectRate / len(inputData) * 100
+    testCorrectRate = a.getDataCorrectRate(testingData)
+    testCorrectRate = testCorrectRate / len(testingData) * 100
+    self.showTestingRate_lb_var.set('測試辨識率: ' + str(testCorrectRate) + '%')
+
+    trainCorrectRate = a.getDataCorrectRate(trainingData)
+    trainCorrectRate = trainCorrectRate / len(trainingData) * 100
     self.showTrainingRate_lb_var.set('訓練辨識率: ' + str(trainCorrectRate) + '%')
-    print('startCalcu')
+
+    allWeight = a.getAllModelWeight()
+
+    for levelIndex, level in enumerate(allWeight):
+      for itemIndex, item in enumerate(level):
+        self.updateWeightData('-----Level:' + str(levelIndex) + ',' + 'Index:' + str(itemIndex) + '-----')
+        temp = '[' + str(round(item[0], 3)) + ',' + str(round(item[1], 3)) + ',' + str(round(item[1], 3)) + ']'
+        self.updateWeightData(temp)
+
+  def randomDataTo2Array(self, data):
+    index = 0
+    testingCount = int((len(data) / 3) * 1)
+    dataForTraining = data[:]
+    dataForTesting = []
+    while testingCount != len(dataForTesting):
+      trainingRange = len(dataForTraining) - 1
+      index = random.randint(0, trainingRange)
+      dataForTesting.append(dataForTraining[index])
+      del dataForTraining[index]
+
+    return dataForTraining, dataForTesting
 
   def _component(self):
     self.learnRate_lb = tk.Label(
@@ -147,39 +172,39 @@ class UiLayoutV2():
     )
     showRMSERate_lb.grid( row = 8, column = 6, columnspan = 10, sticky = 'W' )
 
-    self.testWeight_lb = tk.Label(
-      self.__WINDOW, 
-      text = '訓練前 Weight', 
-      font = ('Arial', 10)
-    )
-    self.testWeight_lb.grid( row = 18, column = 7)
+    # self.testWeight_lb = tk.Label(
+    #   self.__WINDOW, 
+    #   text = '訓練前 Weight', 
+    #   font = ('Arial', 10)
+    # )
+    # self.testWeight_lb.grid( row = 18, column = 7)
 
-    self.testgWeight_tv = ttk.Treeview(self.__WINDOW)
-    self.testgWeight_tv['columns'] = ('Value')
-    self.testgWeight_tv.heading("#0", text='WeightIndex', anchor='w')
-    self.testgWeight_tv.column("#0", anchor="w", width = 100)
-    self.testgWeight_tv.heading('Value', text='Value')
-    self.testgWeight_tv.column('Value', anchor='center', width = 200)
-    self.testgWeight_tv.grid( 
-      row = 19, 
-      column = 6,
-      rowspan = 10,
-      columnspan = 5,
-      padx = 20,
-    )
+    # self.testgWeight_tv = ttk.Treeview(self.__WINDOW)
+    # self.testgWeight_tv['columns'] = ('Value')
+    # self.testgWeight_tv.heading("#0", text='WeightIndex', anchor='w')
+    # self.testgWeight_tv.column("#0", anchor="w", width = 300)
+    # self.testgWeight_tv.heading('Value', text='Value')
+    # self.testgWeight_tv.column('Value', anchor='center', width = 200)
+    # self.testgWeight_tv.grid( 
+    #   row = 19, 
+    #   column = 6,
+    #   rowspan = 10,
+    #   columnspan = 5,
+    #   padx = 20,
+    # )
     self.trainingWeight_lb = tk.Label(
       self.__WINDOW, 
-      text = '訓練後 Weight', 
+      text = '所有 Weight', 
       font = ('Arial', 10)
     )
     self.trainingWeight_lb.grid( row = 29, column = 7)
 
     self.trainingWeight_tv = ttk.Treeview(self.__WINDOW)
-    self.trainingWeight_tv['columns'] = ('Value')
-    self.trainingWeight_tv.heading("#0", text='WeightIndex', anchor='w')
-    self.trainingWeight_tv.column("#0", anchor="w", width = 100)
-    self.trainingWeight_tv.heading('Value', text='Value')
-    self.trainingWeight_tv.column('Value', anchor='center', width = 200)
+    # self.trainingWeight_tv['columns'] = ('Index 1')
+    # self.trainingWeight_tv.heading("#0", text='WeightIndex', anchor='w')
+    self.trainingWeight_tv.column("#0", anchor="w", width = 300)
+    # self.trainingWeight_tv.heading('Value', text='Value')
+    # self.trainingWeight_tv.column('Value', anchor='center', width = 200)
     self.trainingWeight_tv.grid( 
       row = 30,
       column = 6,
@@ -188,9 +213,10 @@ class UiLayoutV2():
       padx = 20,
     )
 
-  def updateWeightData(self, tv, datas):
-    for index, data in enumerate(datas):
-      tv.insert('', 'end', text = index, values=('0.12345789123456'))
+  def updateWeightData(self, datas):
+    # for index, data in enumerate(datas):
+    #   self.trainingWeight_tv.insert('', 'end', text = index)
+    self.trainingWeight_tv.insert('', 'end', text = datas)
 
   def _closeWindow(self):
     self.__WINDOW.quit()

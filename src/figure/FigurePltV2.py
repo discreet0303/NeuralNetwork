@@ -68,10 +68,10 @@ class FigurePltV2():
     if name == 'test':
       self.__TEST_PLT = self.__FIG.add_subplot(211)
       self.__TEST_PLT.cla()
-      self.__TEST_PLT.set_title('Test')
+      self.__TEST_PLT.set_title('Original Data')
     elif name == 'train':
       self.__TRAINING_PLT.cla()
-      self.__TRAINING_PLT.set_title('Training')
+      self.__TRAINING_PLT.set_title('The result of the testing data')
       self.__TRAINING_PLT.set_xlim(0, 1)
       self.__TRAINING_PLT.set_ylim(0, 1)
 
@@ -81,9 +81,9 @@ class FigurePltV2():
     else:
       self.__TEST_PLT = self.__FIG.add_subplot(211)
 
-    self.__TEST_PLT.set_title('Test')
+    self.__TEST_PLT.set_title('Original Data Type')
     self.__TRAINING_PLT = self.__FIG.add_subplot(212)
-    self.__TRAINING_PLT.set_title('Training')
+    self.__TRAINING_PLT.set_title('The result of the testing data')
     self.__TRAINING_PLT.set_xlim(0, 1)
     self.__TRAINING_PLT.set_ylim(0, 1)
 

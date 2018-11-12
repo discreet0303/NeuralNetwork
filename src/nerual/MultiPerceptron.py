@@ -6,11 +6,10 @@ class MultiPerceptron():
 
   def __init__(self):
     print('MultiPerceptron')
-    self.__LEVEL = 2
+    self.__LEVEL = 3
     self.__ITEM = 2
 
-    self.__END_ROUND = 2000
-    
+    self.__END_ROUND = 1000
     self.__ERROR = 0
 
     self.__PERCEPTRON_MODEL = []
@@ -21,27 +20,19 @@ class MultiPerceptron():
       self.__PERCEPTRON_MODEL.append(temp)
     self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
 
-    # self.__PERCEPTRON_MODEL[0][0].setWeight([-1.2,1,1])
-    # self.__PERCEPTRON_MODEL[0][1].setWeight([0.3,1,1])
-    # self.__PERCEPTRON_MODEL[1][0].setWeight([0.5,0.4,0.8])
-
   def startTraining(self, inputData, eValList):
     self.setRegexEValue(eValList)
-
     for count in range(self.__END_ROUND):
       self.__ERROR = 0
       for data in inputData:
         self.singleDataTraining(data)
-      # print("Count: ", count, '=> ', self.__ERROR)
-        
-    # self.printWeight()
+      print("Count: ", count, '=> ', self.__ERROR)
+
     transPoint = []
     for pos in inputData:
-      eVal = pos[1]
       x = self.calcu(pos[0], self.__PERCEPTRON_MODEL[self.__LEVEL - 2][0].getWeight())
       y = self.calcu(pos[0], self.__PERCEPTRON_MODEL[self.__LEVEL - 2][1].getWeight())
-
-      transPoint.append([[x, y], eVal])
+      transPoint.append([[x, y], pos[1]])
 
     return transPoint, self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getWeight()
 
