@@ -6,10 +6,10 @@ class MultiPerceptron():
 
   def __init__(self):
     print('MultiPerceptron')
-    self.__LEVEL = 3
+    self.__LEVEL = 2
     self.__ITEM = 2
 
-    self.__END_ROUND = 1000
+    self.__END_ROUND = 100000
     self.__ERROR = 0
 
     self.__PERCEPTRON_MODEL = []
@@ -125,14 +125,13 @@ class MultiPerceptron():
         print('level:', levelIndex, 'weight:', itemIndex, 'output', item.getEOutput())
         print(item.getWeight())
     print(self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput())
-
+  
   def getDataCorrectRate(self, inputData):
     regexE = self.getRegexEValue()
     count = 0
     for data in inputData:
       point = data[0]
       eVal = data[1]
-      middleVal = regexE[eVal]['middleVal']
 
       for levelCount, level in enumerate(self.__PERCEPTRON_MODEL):
         for perceptron in level:
@@ -147,3 +146,29 @@ class MultiPerceptron():
       if self.checkWeight(eVal, finalOutput):
         count += 1
     return count
+
+  def getFinalOutpuToRegex(self, inputData):
+    print('getFinalOutpuToRegex')
+    pos = inputData
+    eVal = 0
+    for levelCount, level in enumerate(self.__PERCEPTRON_MODEL):
+      for perceptron in level:
+        if levelCount == 0:
+          perceptron.setInputData([inputData, eVal])
+        else:
+          eOutput = self.getLevelPerceptronOutput(self.__PERCEPTRON_MODEL[levelCount - 1])
+          perceptron.setInputData([eOutput, eVal])
+    self.printWeight()
+    finalOutput = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput()
+    regexE = self.getRegexEValue()
+    # print(self.getRegexEValue())
+    for area in regexE:
+      # print(area)
+      minRange = regexE[area]['minRange']
+      maxRange = regexE[area]['maxRange']
+      if minRange < finalOutput < maxRange:
+        print(finalOutput)
+        return regexE[area]['e']
+        
+    return 'None'
+      

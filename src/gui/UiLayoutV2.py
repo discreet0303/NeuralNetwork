@@ -35,6 +35,7 @@ class UiLayoutV2():
     
     self.__FIGURE_PLT.clearPlt('test')
     self.__FIGURE_PLT.updateTestPoint(inputData)
+    self.trainingWeight_tv.delete(*self.trainingWeight_tv.get_children())
 
     a = MultiPerceptron()
     testingData, trainingData = self.randomDataTo2Array(inputData)
@@ -59,7 +60,25 @@ class UiLayoutV2():
         temp = '[' + str(round(item[0], 3)) + ',' + str(round(item[1], 3)) + ',' + str(round(item[1], 3)) + ']'
         self.updateWeightData(temp)
 
+    # self.getCheckboxVal()
+
+  def startCalcuForBitNumTesting(self):
+    inputData, eValList = self.__FILE.getFileContentV2('Number.txt')
+    
+    num = MultiPerceptron()
+    data, weight = num.startTraining(inputData, eValList)
+
+    testData = self.getCheckboxVal()
+    
+    print(num.getFinalOutpuToRegex(testData))
+
+
+  def startCalcuForBitNumTraining(self):
+    print(123)
+
   def randomDataTo2Array(self, data):
+    if len(data) < 10:
+      return data, data
     index = 0
     testingCount = int((len(data) / 3) * 1)
     dataForTraining = data[:]
@@ -71,28 +90,6 @@ class UiLayoutV2():
       del dataForTraining[index]
 
     return dataForTraining, dataForTesting
-
-  def rbDeselect(self):
-    print('rbDeselect')
-    self.bitNum00_rb.deselect()
-
-  def bitNum25(self):
-    var00 = tk.IntVar()
-    self.bitNum00_rb = tk.Checkbutton(self.__WINDOW, variable = var00, command = self.changeCheckboxVal)
-    self.bitNum00_rb.grid(row = 9, column = 6)
-    
-    var01 = tk.IntVar()
-    self.bitNum01_rb = tk.Radiobutton(self.__WINDOW, variable=var01, value=1, command = self.rbDeselect)
-    self.bitNum01_rb.grid(row = 9, column = 7)
-
-    var02 = tk.IntVar()
-    self.bitNum02_rb = tk.Radiobutton(self.__WINDOW, variable=var02, value=2, command = self.rbDeselect)
-    self.bitNum02_rb.grid(row = 9, column = 8)
-
-    var03 = tk.IntVar()
-    self.bitNum03_rb = tk.Radiobutton(self.__WINDOW, variable=var03, value=2, command = self.rbDeselect)
-    self.bitNum03_rb.grid(row = 9, column = 9)
-
 
   def _component(self):
     self.learnRate_lb = tk.Label(
@@ -194,26 +191,6 @@ class UiLayoutV2():
     )
     showRMSERate_lb.grid( row = 8, column = 6, columnspan = 10, sticky = 'W' )
 
-    # self.testWeight_lb = tk.Label(
-    #   self.__WINDOW, 
-    #   text = '訓練前 Weight', 
-    #   font = ('Arial', 10)
-    # )
-    # self.testWeight_lb.grid( row = 18, column = 7)
-
-    # self.testgWeight_tv = ttk.Treeview(self.__WINDOW)
-    # self.testgWeight_tv['columns'] = ('Value')
-    # self.testgWeight_tv.heading("#0", text='WeightIndex', anchor='w')
-    # self.testgWeight_tv.column("#0", anchor="w", width = 300)
-    # self.testgWeight_tv.heading('Value', text='Value')
-    # self.testgWeight_tv.column('Value', anchor='center', width = 200)
-    # self.testgWeight_tv.grid( 
-    #   row = 19, 
-    #   column = 6,
-    #   rowspan = 10,
-    #   columnspan = 5,
-    #   padx = 20,
-    # )
     self.trainingWeight_lb = tk.Label(
       self.__WINDOW, 
       text = '所有 Weight', 
@@ -222,11 +199,7 @@ class UiLayoutV2():
     self.trainingWeight_lb.grid( row = 29, column = 7)
 
     self.trainingWeight_tv = ttk.Treeview(self.__WINDOW)
-    # self.trainingWeight_tv['columns'] = ('Index 1')
-    # self.trainingWeight_tv.heading("#0", text='WeightIndex', anchor='w')
     self.trainingWeight_tv.column("#0", anchor="w", width = 300)
-    # self.trainingWeight_tv.heading('Value', text='Value')
-    # self.trainingWeight_tv.column('Value', anchor='center', width = 200)
     self.trainingWeight_tv.grid( 
       row = 30,
       column = 6,
@@ -236,10 +209,158 @@ class UiLayoutV2():
     )
 
   def updateWeightData(self, datas):
-    # for index, data in enumerate(datas):
-    #   self.trainingWeight_tv.insert('', 'end', text = index)
     self.trainingWeight_tv.insert('', 'end', text = datas)
 
   def _closeWindow(self):
     self.__WINDOW.quit()
     self.__WINDOW.destroy()
+
+  def getCheckboxVal(self):
+    temp = []
+    # 0
+    temp.append(self.var00.get())
+    temp.append(self.var01.get())
+    temp.append(self.var02.get())
+    temp.append(self.var03.get())
+    temp.append(self.var04.get())
+    # 1
+    temp.append(self.var10.get())
+    temp.append(self.var11.get())
+    temp.append(self.var12.get())
+    temp.append(self.var13.get())
+    temp.append(self.var14.get())
+    # 2
+    temp.append(self.var20.get())
+    temp.append(self.var21.get())
+    temp.append(self.var22.get())
+    temp.append(self.var23.get())
+    temp.append(self.var24.get())
+    # 3
+    temp.append(self.var30.get())
+    temp.append(self.var31.get())
+    temp.append(self.var32.get())
+    temp.append(self.var33.get())
+    temp.append(self.var34.get())
+    # 4
+    temp.append(self.var40.get())
+    temp.append(self.var41.get())
+    temp.append(self.var42.get())
+    temp.append(self.var43.get())
+    temp.append(self.var44.get())
+
+    return temp
+
+  def bitNum25(self):
+    self.startCalcuForBitNumTraining_bt = tk.Button(
+      self.__WINDOW, 
+      text = "數字訓練開始", 
+      command = self.startCalcuForBitNumTraining, 
+      width = 9,
+      height = 3,
+    )
+    self.startCalcuForBitNumTraining_bt.grid(
+      row = 0,
+      column = 11,
+      rowspan = 2,
+      columnspan = 3,
+      padx = 5,
+      pady = 5,
+    )
+
+    self.startCalcuForBitNumTesting_bt = tk.Button(
+      self.__WINDOW, 
+      text = "數字測試", 
+      command = self.startCalcuForBitNumTesting, 
+      width = 7,
+      height = 3,
+    )
+    self.startCalcuForBitNumTesting_bt.grid(
+      row = 0,
+      column = 14,
+      rowspan = 2,
+      columnspan = 2,
+      padx = 5,
+      pady = 5,
+    )
+
+    startRow = 2
+    # 0
+    self.var00 = tk.IntVar()
+    self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var00)
+    self.bitNum00_cb.grid(row = startRow, column = 11)
+    self.var01 = tk.IntVar()
+    self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var01)
+    self.bitNum01_cb.grid(row = startRow, column = 12)
+    self.var02= tk.IntVar()
+    self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var02)
+    self.bitNum02_cb.grid(row = startRow, column = 13)
+    self.var03 = tk.IntVar()
+    self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var03)
+    self.bitNum03_cb.grid(row = startRow, column = 14)
+    self.var04 = tk.IntVar()
+    self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var04)
+    self.bitNum04_cb.grid(row = startRow, column = 15)
+    # 1
+    self.var10 = tk.IntVar()
+    self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var10)
+    self.bitNum00_cb.grid(row = startRow + 1, column = 11)
+    self.var11 = tk.IntVar()
+    self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var11)
+    self.bitNum01_cb.grid(row = startRow + 1, column = 12)
+    self.var12= tk.IntVar()
+    self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var12)
+    self.bitNum02_cb.grid(row = startRow + 1, column = 13)
+    self.var13 = tk.IntVar()
+    self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var13)
+    self.bitNum03_cb.grid(row = startRow + 1, column = 14)
+    self.var14 = tk.IntVar()
+    self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var14)
+    self.bitNum04_cb.grid(row = startRow + 1, column = 15)
+    # 2
+    self.var20 = tk.IntVar()
+    self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var20)
+    self.bitNum00_cb.grid(row = startRow + 2, column = 11)
+    self.var21 = tk.IntVar()
+    self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var21)
+    self.bitNum01_cb.grid(row = startRow + 2, column = 12)
+    self.var22= tk.IntVar()
+    self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var22)
+    self.bitNum02_cb.grid(row = startRow + 2, column = 13)
+    self.var23 = tk.IntVar()
+    self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var23)
+    self.bitNum03_cb.grid(row = startRow + 2, column = 14)
+    self.var24 = tk.IntVar()
+    self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var24)
+    self.bitNum04_cb.grid(row = startRow + 2, column = 15)
+    # 3
+    self.var30 = tk.IntVar()
+    self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var30)
+    self.bitNum00_cb.grid(row = startRow + 3, column = 11)
+    self.var31 = tk.IntVar()
+    self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var31)
+    self.bitNum01_cb.grid(row = startRow + 3, column = 12)
+    self.var32= tk.IntVar()
+    self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var32)
+    self.bitNum02_cb.grid(row = startRow + 3, column = 13)
+    self.var33 = tk.IntVar()
+    self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var33)
+    self.bitNum03_cb.grid(row = startRow + 3, column = 14)
+    self.var34 = tk.IntVar()
+    self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var34)
+    self.bitNum04_cb.grid(row = startRow + 3, column = 15)
+    # 4
+    self.var40 = tk.IntVar()
+    self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var40)
+    self.bitNum00_cb.grid(row = startRow + 4, column = 11)
+    self.var41 = tk.IntVar()
+    self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var41)
+    self.bitNum01_cb.grid(row = startRow + 4, column = 12)
+    self.var42= tk.IntVar()
+    self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var42)
+    self.bitNum02_cb.grid(row = startRow + 4, column = 13)
+    self.var43 = tk.IntVar()
+    self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var43)
+    self.bitNum03_cb.grid(row = startRow + 4, column = 14)
+    self.var44 = tk.IntVar()
+    self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var44)
+    self.bitNum04_cb.grid(row = startRow + 4, column = 15)

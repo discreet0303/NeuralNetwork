@@ -7,7 +7,6 @@ class File():
         self.__DATASET_DIR_PATH = os.path.join(self.__BASE_DIR_PATH, 'dataSet')
 
     def getFileContentV2(self, fileName):
-        # filePath = os.path.join(self.__DATASET_DIR_PATH, '2Circle1.txt')
         filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
 
         with open(filePath, 'r') as dataSet:
