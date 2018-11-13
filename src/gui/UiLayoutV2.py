@@ -21,6 +21,7 @@ class UiLayoutV2():
     
     self.__FIGURE_PLT = FigurePltV2(self.__WINDOW)
     self.__FILE = File()
+
     self._component()
     self.bitNum25()
     self.__WINDOW.mainloop()
@@ -63,18 +64,14 @@ class UiLayoutV2():
     # self.getCheckboxVal()
 
   def startCalcuForBitNumTesting(self):
-    inputData, eValList = self.__FILE.getFileContentV2('Number.txt')
-    
-    num = MultiPerceptron()
-    data, weight = num.startTraining(inputData, eValList)
-
     testData = self.getCheckboxVal()
-    
-    print(num.getFinalOutpuToRegex(testData))
-
+    print(self.__NUM_PERCEPTRON.getFinalOutpuToRegex(testData))
 
   def startCalcuForBitNumTraining(self):
-    print(123)
+    inputData, eValList = self.__FILE.getFileContentV2('Number.txt')
+    self.__NUM_PERCEPTRON  = MultiPerceptron()
+    data, weight = self.__NUM_PERCEPTRON.startTraining(inputData, eValList)
+
 
   def randomDataTo2Array(self, data):
     if len(data) < 10:
