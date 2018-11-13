@@ -4,13 +4,14 @@ import numpy as np
 import math
 class MultiPerceptron():
 
-  def __init__(self):
+  def __init__(self, plt):
     print('MultiPerceptron')
-    self.__LEVEL = 2
+    self.__LEVEL = 3
     self.__ITEM = 2
 
-    self.__END_ROUND = 100000
+    self.__END_ROUND = 300
     self.__ERROR = 0
+    self.plt = plt
 
     self.__PERCEPTRON_MODEL = []
     for level in range(0, self.__LEVEL - 1):
@@ -21,18 +22,36 @@ class MultiPerceptron():
     self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
 
   def startTraining(self, inputData, eValList):
+    # self.setRegexEValue([0, 1])
+    # inputData = [
+    #   [[-1,1,1],0]
+    # ]
     self.setRegexEValue(eValList)
     for count in range(self.__END_ROUND):
       self.__ERROR = 0
       for data in inputData:
         self.singleDataTraining(data)
-      print("Count: ", count, '=> ', self.__ERROR)
 
-    transPoint = []
-    for pos in inputData:
-      x = self.calcu(pos[0], self.__PERCEPTRON_MODEL[self.__LEVEL - 2][0].getWeight())
-      y = self.calcu(pos[0], self.__PERCEPTRON_MODEL[self.__LEVEL - 2][1].getWeight())
-      transPoint.append([[x, y], pos[1]])
+      if count % 50 == 0:
+        # print("Count: ", count, '=> ', self.__ERROR)
+        transPoint = []
+              
+        for pos in inputData:
+          data = pos[0]
+          eVal = pos[1]
+          for levelCount, level in enumerate(self.__PERCEPTRON_MODEL):
+            for perceptron in level:
+              if levelCount == 0:
+                perceptron.setInputData(pos)
+              else:
+                eOutput = self.getLevelPerceptronOutput(self.__PERCEPTRON_MODEL[levelCount - 1])
+                perceptron.setInputData([eOutput, eVal])
+          x = self.__PERCEPTRON_MODEL[self.__LEVEL - 2][0].getEOutput()
+          y = self.__PERCEPTRON_MODEL[self.__LEVEL - 2][1].getEOutput()
+          transPoint.append([[x, y], pos[1]])
+        
+        self.plt.clearPlt('train')
+        self.plt.updateFigurePoint(transPoint, True)
 
     return transPoint, self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getWeight()
 
@@ -161,9 +180,7 @@ class MultiPerceptron():
     self.printWeight()
     finalOutput = self.__PERCEPTRON_MODEL[self.__LEVEL - 1][0].getEOutput()
     regexE = self.getRegexEValue()
-    # print(self.getRegexEValue())
     for area in regexE:
-      # print(area)
       minRange = regexE[area]['minRange']
       maxRange = regexE[area]['maxRange']
       if minRange < finalOutput < maxRange:
@@ -171,4 +188,5 @@ class MultiPerceptron():
         return regexE[area]['e']
         
     return 'None'
-      
+  def getRMSE(self):
+    return self.__ERROR

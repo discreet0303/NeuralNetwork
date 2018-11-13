@@ -16,7 +16,7 @@ class UiLayoutV2():
     self.__WINDOW = tk.Tk()
     self.__WINDOW.title("Neural Network HW_02")
     self.__WINDOW.resizable(0, 0)
-    self.__WINDOW.geometry("1000x775+100+100")
+    self.__WINDOW.geometry("830x775+100+100")
     self.__WINDOW.protocol("WM_DELETE_WINDOW", self._closeWindow)
     
     self.__FIGURE_PLT = FigurePltV2(self.__WINDOW)
@@ -33,17 +33,18 @@ class UiLayoutV2():
 
     fileName = self.fileOptionValue.get()
     inputData, eValList = self.__FILE.getFileContentV2(fileName)
-    
+    # print(inputData)
     self.__FIGURE_PLT.clearPlt('test')
     self.__FIGURE_PLT.updateTestPoint(inputData)
     self.trainingWeight_tv.delete(*self.trainingWeight_tv.get_children())
 
-    a = MultiPerceptron()
+    a = MultiPerceptron(self.__FIGURE_PLT)
     testingData, trainingData = self.randomDataTo2Array(inputData)
-    data, weight = a.startTraining(testingData, eValList)
+    data, weight = a.startTraining(inputData, eValList)
+    # data, weight = a.startTraining(testingData, eValList)
     self.__FIGURE_PLT.clearPlt('train')
     self.__FIGURE_PLT.updateFigurePoint(data, True)
-    self.__FIGURE_PLT.updateFigureLine(weight)
+    # self.__FIGURE_PLT.updateFigureLine(weight)
 
     testCorrectRate = a.getDataCorrectRate(testingData)
     testCorrectRate = testCorrectRate / len(testingData) * 100
@@ -53,15 +54,18 @@ class UiLayoutV2():
     trainCorrectRate = trainCorrectRate / len(trainingData) * 100
     self.showTrainingRate_lb_var.set('訓練辨識率: ' + str(trainCorrectRate) + '%')
 
+    rmse = a.getRMSE()
+    rmse = rmse / len(inputData)
+    self.showRMSERate_lb_var.set('RMSE: ' + str(rmse))
+
     allWeight = a.getAllModelWeight()
 
+    self.updateWeightData('(Level, Index) : weight')
     for levelIndex, level in enumerate(allWeight):
       for itemIndex, item in enumerate(level):
-        self.updateWeightData('-----Level:' + str(levelIndex) + ',' + 'Index:' + str(itemIndex) + '-----')
-        temp = '[' + str(round(item[0], 3)) + ',' + str(round(item[1], 3)) + ',' + str(round(item[1], 3)) + ']'
+        level = '(' + str(levelIndex) + ',' + str(itemIndex) + ')   :  '
+        temp = level + '[' + str(round(item[0], 3)) + ',' + str(round(item[1], 3)) + ',' + str(round(item[1], 3)) + ']'
         self.updateWeightData(temp)
-
-    # self.getCheckboxVal()
 
   def startCalcuForBitNumTesting(self):
     testData = self.getCheckboxVal()
@@ -69,9 +73,8 @@ class UiLayoutV2():
 
   def startCalcuForBitNumTraining(self):
     inputData, eValList = self.__FILE.getFileContentV2('Number.txt')
-    self.__NUM_PERCEPTRON  = MultiPerceptron()
+    self.__NUM_PERCEPTRON  = MultiPerceptron(self.__FIGURE_PLT)
     data, weight = self.__NUM_PERCEPTRON.startTraining(inputData, eValList)
-
 
   def randomDataTo2Array(self, data):
     if len(data) < 10:
@@ -94,24 +97,24 @@ class UiLayoutV2():
       text = '學習率', 
       font = ('Arial', 10)
     )
-    self.learnRate_lb.grid( row = 0, column = 6, sticky = "E")
+    self.learnRate_lb.grid( row = 0, column = 6, columnspan = 3, sticky = "E")
 
     self.learnRate_tf = tk.Entry(
       self.__WINDOW,
     )
-    self.learnRate_tf.grid( row = 0, column = 7)
+    self.learnRate_tf.grid( row = 0, column = 9, columnspan = 5)
 
     self.endCondition_lb = tk.Label(
       self.__WINDOW, 
       text = '收斂條件(次數)', 
       font = ('Arial', 10)
     )
-    self.endCondition_lb.grid( row = 1, column = 6, sticky = "E")
+    self.endCondition_lb.grid( row = 1, column = 6, columnspan = 3, sticky = "E")
 
     self.endCondition_tf = tk.Entry(
       self.__WINDOW,
     )
-    self.endCondition_tf.grid( row = 1, column = 7 )
+    self.endCondition_tf.grid( row = 1, column = 9, columnspan = 5 )
 
     self.startCalcu_bt = tk.Button(
       self.__WINDOW, 
@@ -122,7 +125,7 @@ class UiLayoutV2():
     )
     self.startCalcu_bt.grid(
       row = 0,
-      column = 8,
+      column = 14,
       rowspan = 2,
       padx = 5,
       pady = 5,
@@ -137,7 +140,7 @@ class UiLayoutV2():
     )
     self.closeWindow_bt.grid(
       row = 0,
-      column = 9,
+      column = 16,
       rowspan = 2,
       padx = 5,
       pady = 5,
@@ -152,14 +155,14 @@ class UiLayoutV2():
         text = '請選擇檔案', 
         font = ('Arial', 10)
     )
-    self.fileOption_lb.grid( row = 2, column = 6 )
+    self.fileOption_lb.grid( row = 2, column = 6, columnspan = 3 )
 
     self.fileOption_op = tk.OptionMenu(
         self.__WINDOW, 
         self.fileOptionValue,
         *fileOptions
     )
-    self.fileOption_op.grid( row = 2, column = 7 )
+    self.fileOption_op.grid( row = 2, column = 9, columnspan = 5 )
 
     self.showTestingRate_lb_var = tk.StringVar()
     self.showTestingRate_lb_var.set('測試辨識率: 無')
@@ -168,7 +171,7 @@ class UiLayoutV2():
         textvariable = self.showTestingRate_lb_var, 
         font = ('Arial', 10)
     )
-    showTestingRate_lb.grid( row = 6, column = 6, columnspan = 10, sticky = 'W' )
+    showTestingRate_lb.grid( row = 4, column = 6, columnspan = 10, sticky = 'W', padx = 10 )
 
     self.showTrainingRate_lb_var = tk.StringVar()
     self.showTrainingRate_lb_var.set('訓練辨識率: 無')
@@ -177,31 +180,30 @@ class UiLayoutV2():
         textvariable = self.showTrainingRate_lb_var, 
         font = ('Arial', 10)
     )
-    showTrainingRate_lb.grid( row = 7, column = 6, columnspan = 10, sticky = 'W' )
+    showTrainingRate_lb.grid( row = 5, column = 6, columnspan = 10, sticky = 'W', padx = 10 )
 
     self.showRMSERate_lb_var = tk.StringVar()
-    self.showRMSERate_lb_var.set('均方根誤差: 無')
+    self.showRMSERate_lb_var.set('RMSE: 無')
     showRMSERate_lb = tk.Label(
         self.__WINDOW, 
         textvariable = self.showRMSERate_lb_var, 
         font = ('Arial', 10)
     )
-    showRMSERate_lb.grid( row = 8, column = 6, columnspan = 10, sticky = 'W' )
-
-    self.trainingWeight_lb = tk.Label(
+    showRMSERate_lb.grid( row = 6, column = 6, columnspan = 10, sticky = 'W', padx = 10 )
+    
+    allweight_lb = tk.Label(
       self.__WINDOW, 
-      text = '所有 Weight', 
-      font = ('Arial', 10)
+      text = "所有感知機鍵結值", 
     )
-    self.trainingWeight_lb.grid( row = 29, column = 7)
+    allweight_lb.grid( row = 7, column = 7, padx = 20 )
 
     self.trainingWeight_tv = ttk.Treeview(self.__WINDOW)
-    self.trainingWeight_tv.column("#0", anchor="w", width = 300)
+    self.trainingWeight_tv.column("#0", anchor="w", width = 400)
     self.trainingWeight_tv.grid( 
-      row = 30,
+      row = 8,
       column = 6,
-      rowspan = 10,
-      columnspan = 5,
+      rowspan = 15,
+      columnspan = 25,
       padx = 20,
     )
 
@@ -248,16 +250,25 @@ class UiLayoutV2():
     return temp
 
   def bitNum25(self):
+    bitNum_lb = tk.Label(
+      self.__WINDOW, 
+      text = "數字辨識", 
+    )
+    bitNum_lb.grid(
+      row = 26,
+      column = 7
+    )
+
     self.startCalcuForBitNumTraining_bt = tk.Button(
       self.__WINDOW, 
-      text = "數字訓練開始", 
+      text = "訓練開始", 
       command = self.startCalcuForBitNumTraining, 
       width = 9,
       height = 3,
     )
     self.startCalcuForBitNumTraining_bt.grid(
-      row = 0,
-      column = 11,
+      row = 27,
+      column = 6,
       rowspan = 2,
       columnspan = 3,
       padx = 5,
@@ -266,98 +277,99 @@ class UiLayoutV2():
 
     self.startCalcuForBitNumTesting_bt = tk.Button(
       self.__WINDOW, 
-      text = "數字測試", 
+      text = "測試", 
       command = self.startCalcuForBitNumTesting, 
-      width = 7,
+      width = 9,
       height = 3,
     )
     self.startCalcuForBitNumTesting_bt.grid(
-      row = 0,
-      column = 14,
+      row = 29,
+      column = 6,
       rowspan = 2,
-      columnspan = 2,
+      columnspan = 3,
       padx = 5,
       pady = 5,
     )
 
-    startRow = 2
+    startRow = 27
+    startColumn = 10
     # 0
     self.var00 = tk.IntVar()
     self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var00)
-    self.bitNum00_cb.grid(row = startRow, column = 11)
+    self.bitNum00_cb.grid(row = startRow, column = startColumn)
     self.var01 = tk.IntVar()
     self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var01)
-    self.bitNum01_cb.grid(row = startRow, column = 12)
+    self.bitNum01_cb.grid(row = startRow, column = startColumn + 1)
     self.var02= tk.IntVar()
     self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var02)
-    self.bitNum02_cb.grid(row = startRow, column = 13)
+    self.bitNum02_cb.grid(row = startRow, column = startColumn + 2)
     self.var03 = tk.IntVar()
     self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var03)
-    self.bitNum03_cb.grid(row = startRow, column = 14)
+    self.bitNum03_cb.grid(row = startRow, column = startColumn + 3)
     self.var04 = tk.IntVar()
     self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var04)
-    self.bitNum04_cb.grid(row = startRow, column = 15)
+    self.bitNum04_cb.grid(row = startRow, column = startColumn + 4)
     # 1
     self.var10 = tk.IntVar()
     self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var10)
-    self.bitNum00_cb.grid(row = startRow + 1, column = 11)
+    self.bitNum00_cb.grid(row = startRow + 1, column = startColumn)
     self.var11 = tk.IntVar()
     self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var11)
-    self.bitNum01_cb.grid(row = startRow + 1, column = 12)
+    self.bitNum01_cb.grid(row = startRow + 1, column = startColumn + 1)
     self.var12= tk.IntVar()
     self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var12)
-    self.bitNum02_cb.grid(row = startRow + 1, column = 13)
+    self.bitNum02_cb.grid(row = startRow + 1, column = startColumn + 2)
     self.var13 = tk.IntVar()
     self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var13)
-    self.bitNum03_cb.grid(row = startRow + 1, column = 14)
+    self.bitNum03_cb.grid(row = startRow + 1, column = startColumn + 3)
     self.var14 = tk.IntVar()
     self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var14)
-    self.bitNum04_cb.grid(row = startRow + 1, column = 15)
+    self.bitNum04_cb.grid(row = startRow + 1, column = startColumn + 4)
     # 2
     self.var20 = tk.IntVar()
     self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var20)
-    self.bitNum00_cb.grid(row = startRow + 2, column = 11)
+    self.bitNum00_cb.grid(row = startRow + 2, column = startColumn)
     self.var21 = tk.IntVar()
     self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var21)
-    self.bitNum01_cb.grid(row = startRow + 2, column = 12)
+    self.bitNum01_cb.grid(row = startRow + 2, column = startColumn + 1)
     self.var22= tk.IntVar()
     self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var22)
-    self.bitNum02_cb.grid(row = startRow + 2, column = 13)
+    self.bitNum02_cb.grid(row = startRow + 2, column = startColumn + 2)
     self.var23 = tk.IntVar()
     self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var23)
-    self.bitNum03_cb.grid(row = startRow + 2, column = 14)
+    self.bitNum03_cb.grid(row = startRow + 2, column = startColumn + 3)
     self.var24 = tk.IntVar()
     self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var24)
-    self.bitNum04_cb.grid(row = startRow + 2, column = 15)
+    self.bitNum04_cb.grid(row = startRow + 2, column = startColumn + 4)
     # 3
     self.var30 = tk.IntVar()
     self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var30)
-    self.bitNum00_cb.grid(row = startRow + 3, column = 11)
+    self.bitNum00_cb.grid(row = startRow + 3, column = startColumn)
     self.var31 = tk.IntVar()
     self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var31)
-    self.bitNum01_cb.grid(row = startRow + 3, column = 12)
+    self.bitNum01_cb.grid(row = startRow + 3, column = startColumn + 1)
     self.var32= tk.IntVar()
     self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var32)
-    self.bitNum02_cb.grid(row = startRow + 3, column = 13)
+    self.bitNum02_cb.grid(row = startRow + 3, column = startColumn + 2)
     self.var33 = tk.IntVar()
     self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var33)
-    self.bitNum03_cb.grid(row = startRow + 3, column = 14)
+    self.bitNum03_cb.grid(row = startRow + 3, column = startColumn + 3)
     self.var34 = tk.IntVar()
     self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var34)
-    self.bitNum04_cb.grid(row = startRow + 3, column = 15)
+    self.bitNum04_cb.grid(row = startRow + 3, column = startColumn + 4)
     # 4
     self.var40 = tk.IntVar()
     self.bitNum00_cb = tk.Checkbutton(self.__WINDOW, variable = self.var40)
-    self.bitNum00_cb.grid(row = startRow + 4, column = 11)
+    self.bitNum00_cb.grid(row = startRow + 4, column = startColumn)
     self.var41 = tk.IntVar()
     self.bitNum01_cb = tk.Checkbutton(self.__WINDOW, variable = self.var41)
-    self.bitNum01_cb.grid(row = startRow + 4, column = 12)
+    self.bitNum01_cb.grid(row = startRow + 4, column = startColumn + 1)
     self.var42= tk.IntVar()
     self.bitNum02_cb = tk.Checkbutton(self.__WINDOW, variable = self.var42)
-    self.bitNum02_cb.grid(row = startRow + 4, column = 13)
+    self.bitNum02_cb.grid(row = startRow + 4, column = startColumn + 2)
     self.var43 = tk.IntVar()
     self.bitNum03_cb = tk.Checkbutton(self.__WINDOW, variable = self.var43)
-    self.bitNum03_cb.grid(row = startRow + 4, column = 14)
+    self.bitNum03_cb.grid(row = startRow + 4, column = startColumn + 3)
     self.var44 = tk.IntVar()
     self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var44)
-    self.bitNum04_cb.grid(row = startRow + 4, column = 15)
+    self.bitNum04_cb.grid(row = startRow + 4, column = startColumn + 4)

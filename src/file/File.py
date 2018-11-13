@@ -22,12 +22,23 @@ class File():
             for dataIndex, i in enumerate(data.split()):
                 if dataIndex == len(data.split()) - 1:
                     eVal = float(i)
+                    if eVal > maxDataRange:
+                        maxDataRange = eVal
+                    if eVal < minDataRange:
+                        minDataRange = eVal
+
                     if eVal not in eValList:
                         eValList.append(eVal)
                 else:
                     arr.append(float(i))
             
             dataArr.append([arr, eVal])
+        
+        # for data in dataArr:
+        #     for itemIndex, item in enumerate(data[0]):
+        #         if itemIndex == 0: continue
+        #         else:
+        #             item = (item - minDataRange) / (maxDataRange - minDataRange)
 
         return dataArr, eValList
 
