@@ -92,7 +92,7 @@ class File():
         return dataArr
 
     def getDataSetFileName(self):
-        disableName = ['IRIS.TXT', 'perceptron4.txt', 'wine.txt', '4satellite-6.txt', 'Number.txt', '8OX.TXT', '5CloseS1.txt', 'C10D.TXT']
+        disableName = ['IRIS.TXT', 'wine.txt', '4satellite-6.txt', 'Number.txt', '8OX.TXT', '5CloseS1.txt', 'C10D.TXT']
 
         dataFileArr = []
         for dataFile in os.listdir('./dataSet'):

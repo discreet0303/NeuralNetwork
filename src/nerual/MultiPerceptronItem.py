@@ -7,7 +7,7 @@ class MultiPerceptronItem():
     def __init__(self):
         self.__DATA = []
         self.__W = []
-        self.__LEARN_RATE = 0.01
+        self.__LEARN_RATE = 0.3
         self.__BACK_PROPAGATE = 0
 
     def setInputData(self, inputData):

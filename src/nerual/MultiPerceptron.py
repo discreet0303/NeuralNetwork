@@ -9,16 +9,19 @@ class MultiPerceptron():
     self.__LEVEL = 3
     self.__ITEM = 2
 
-    self.__END_ROUND = 300
+    self.__END_ROUND = 10000
     self.__ERROR = 0
     self.plt = plt
 
     self.__PERCEPTRON_MODEL = []
-    for level in range(0, self.__LEVEL - 1):
-      temp = []
-      for item in range(0, self.__ITEM):
-        temp.append(MultiPerceptronItem())
-      self.__PERCEPTRON_MODEL.append(temp)
+    # for level in range(0, self.__LEVEL - 1):
+    #   temp = []
+    #   for item in range(0, self.__ITEM):
+    #     temp.append(MultiPerceptronItem())
+    #   self.__PERCEPTRON_MODEL.append(temp)
+    # self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
+    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(),MultiPerceptronItem(),MultiPerceptronItem(),MultiPerceptronItem()])
+    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(),MultiPerceptronItem()])
     self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
 
   def startTraining(self, inputData, eValList):
@@ -33,7 +36,7 @@ class MultiPerceptron():
         self.singleDataTraining(data)
 
       if count % 50 == 0:
-        # print("Count: ", count, '=> ', self.__ERROR)
+        print("Count: ", count, '=> ', self.__ERROR)
         transPoint = []
               
         for pos in inputData:
