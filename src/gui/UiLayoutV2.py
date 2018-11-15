@@ -28,17 +28,19 @@ class UiLayoutV2():
 
   def startCalcu(self):
     # setting learnRate endTime
-    # learnRate = self.learnRate_tf.get()
-    # endTime = self.endCondition_tf.get()
+    learnRate = self.learnRate_tf.get()
+    learnRate = float(learnRate)
+    endTime = self.endCondition_tf.get()
+    endTime = int(endTime)
 
     fileName = self.fileOptionValue.get()
     inputData, eValList = self.__FILE.getFileContentV2(fileName)
-    # print(inputData)
+
     self.__FIGURE_PLT.clearPlt('test')
     self.__FIGURE_PLT.updateTestPoint(inputData)
     self.trainingWeight_tv.delete(*self.trainingWeight_tv.get_children())
 
-    a = MultiPerceptron(self.__FIGURE_PLT)
+    a = MultiPerceptron(self.__FIGURE_PLT, learnRate, endTime)
     testingData, trainingData = self.randomDataTo2Array(inputData)
     data, weight = a.startTraining(inputData, eValList)
     # data, weight = a.startTraining(testingData, eValList)
@@ -64,16 +66,25 @@ class UiLayoutV2():
     for levelIndex, level in enumerate(allWeight):
       for itemIndex, item in enumerate(level):
         level = '(' + str(levelIndex) + ',' + str(itemIndex) + ')   :  '
-        temp = level + '[' + str(round(item[0], 3)) + ',' + str(round(item[1], 3)) + ',' + str(round(item[1], 3)) + ']'
+        weightTemp = ''
+        for weight in item:
+          weightTemp = weightTemp + str(round(weight, 3)) + ','
+        temp = level + '[' + weightTemp + ']'
         self.updateWeightData(temp)
 
   def startCalcuForBitNumTesting(self):
     testData = self.getCheckboxVal()
-    print(self.__NUM_PERCEPTRON.getFinalOutpuToRegex(testData))
+    num = self.__NUM_PERCEPTRON.getFinalOutpuToRegex(testData)
+    self.showBitNum_lb_var.set('數字辨識結果: ' + str(num))
+
 
   def startCalcuForBitNumTraining(self):
+    learnRate = self.learnRate_tf.get()
+    learnRate = float(learnRate)
+    endTime = self.endCondition_tf.get()
+    endTime = int(endTime)
     inputData, eValList = self.__FILE.getFileContentV2('Number.txt')
-    self.__NUM_PERCEPTRON  = MultiPerceptron(self.__FIGURE_PLT)
+    self.__NUM_PERCEPTRON  = MultiPerceptron(self.__FIGURE_PLT, learnRate, endTime)
     data, weight = self.__NUM_PERCEPTRON.startTraining(inputData, eValList)
 
   def randomDataTo2Array(self, data):
@@ -373,3 +384,12 @@ class UiLayoutV2():
     self.var44 = tk.IntVar()
     self.bitNum04_cb = tk.Checkbutton(self.__WINDOW, variable = self.var44)
     self.bitNum04_cb.grid(row = startRow + 4, column = startColumn + 4)
+
+    self.showBitNum_lb_var = tk.StringVar()
+    self.showBitNum_lb_var.set('數字辨識結果: 無')
+    showBitNum_lb = tk.Label(
+        self.__WINDOW, 
+        textvariable = self.showBitNum_lb_var, 
+        font = ('Arial', 10)
+    )
+    showBitNum_lb.grid( row = startRow + 6, column = startColumn - 4, columnspan = 10, sticky = 'W', padx = 10 )

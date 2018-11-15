@@ -4,10 +4,10 @@ import math
 
 class MultiPerceptronItem():
     
-    def __init__(self):
+    def __init__(self, learnRate):
         self.__DATA = []
         self.__W = []
-        self.__LEARN_RATE = 0.3
+        self.__LEARN_RATE = learnRate
         self.__BACK_PROPAGATE = 0
 
     def setInputData(self, inputData):
@@ -15,6 +15,7 @@ class MultiPerceptronItem():
         self.__DATA_LENGTH = len(inputData[0]) - 1
         self.__DATA_LENGTH_WITH_PREFIX = len(inputData[0])
         if len(self.__W) != self.__DATA_LENGTH_WITH_PREFIX:
+            # print('self.__DATA_LENGTH_WITH_PREFIX', self.__DATA_LENGTH_WITH_PREFIX)
             self.randomWeight()
         self.setEOutput()
 

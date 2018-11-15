@@ -4,12 +4,12 @@ import numpy as np
 import math
 class MultiPerceptron():
 
-  def __init__(self, plt):
+  def __init__(self, plt, learnRate, endTime):
     print('MultiPerceptron')
     self.__LEVEL = 3
     self.__ITEM = 2
 
-    self.__END_ROUND = 10000
+    self.__END_ROUND = endTime
     self.__ERROR = 0
     self.plt = plt
 
@@ -20,9 +20,9 @@ class MultiPerceptron():
     #     temp.append(MultiPerceptronItem())
     #   self.__PERCEPTRON_MODEL.append(temp)
     # self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
-    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(),MultiPerceptronItem(),MultiPerceptronItem(),MultiPerceptronItem()])
-    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(),MultiPerceptronItem()])
-    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem()])
+    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(learnRate),MultiPerceptronItem(learnRate),MultiPerceptronItem(learnRate),MultiPerceptronItem(learnRate)])
+    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(learnRate),MultiPerceptronItem(learnRate)])
+    self.__PERCEPTRON_MODEL.append([MultiPerceptronItem(learnRate)])
 
   def startTraining(self, inputData, eValList):
     # self.setRegexEValue([0, 1])
@@ -170,7 +170,6 @@ class MultiPerceptron():
     return count
 
   def getFinalOutpuToRegex(self, inputData):
-    print('getFinalOutpuToRegex')
     pos = inputData
     eVal = 0
     for levelCount, level in enumerate(self.__PERCEPTRON_MODEL):
@@ -187,7 +186,6 @@ class MultiPerceptron():
       minRange = regexE[area]['minRange']
       maxRange = regexE[area]['maxRange']
       if minRange < finalOutput < maxRange:
-        print(finalOutput)
         return regexE[area]['e']
         
     return 'None'

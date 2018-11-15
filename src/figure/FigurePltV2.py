@@ -44,8 +44,8 @@ class FigurePltV2():
         self.__TRAINING_PLT.scatter(pos[0], pos[1], c = color, marker = '.')
       else:
         self.__TRAINING_PLT.scatter(pos[0], pos[1], pos[2], c = color, marker = '.')
-    self.__TRAINING_PLT.set_xlim(0, 1)
-    self.__TRAINING_PLT.set_ylim(0, 1)
+    # self.__TRAINING_PLT.set_xlim(0, 1)
+    # self.__TRAINING_PLT.set_ylim(0, 1)
     self.__CANVAS.draw()
 
   def updateTestPoint(self, inputData):
@@ -72,8 +72,8 @@ class FigurePltV2():
     elif name == 'train':
       self.__TRAINING_PLT.cla()
       self.__TRAINING_PLT.set_title('The result of the testing data')
-      self.__TRAINING_PLT.set_xlim(0, 1)
-      self.__TRAINING_PLT.set_ylim(0, 1)
+      # self.__TRAINING_PLT.set_xlim(0, 1)
+      # self.__TRAINING_PLT.set_ylim(0, 1)
 
   def figure2dOr3d(self, is2d):
     if not is2d:
@@ -84,8 +84,8 @@ class FigurePltV2():
     self.__TEST_PLT.set_title('Original Data Type')
     self.__TRAINING_PLT = self.__FIG.add_subplot(212)
     self.__TRAINING_PLT.set_title('The result of the testing data')
-    self.__TRAINING_PLT.set_xlim(0, 1)
-    self.__TRAINING_PLT.set_ylim(0, 1)
+    # self.__TRAINING_PLT.set_xlim(0, 1)
+    # self.__TRAINING_PLT.set_ylim(0, 1)
 
   def randrange(self, n, vmin, vmax):
     return (vmax - vmin)*np.random.rand(n) + vmin
