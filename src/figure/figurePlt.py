@@ -9,10 +9,12 @@ import numpy as np
 
 class figurePlt():
     
-    def __init__(self, __WINDOW, maxDataRange, minDataRange):
+    def __init__(self, __WINDOW, maxDataRange, minDataRange, column, title):
         self.__WINDOW = __WINDOW
 
-        self.__FIG = plt.figure()
+        self.__FIG = plt.figure(num=column, figsize=(3, 3))
+        # self.__FIG = plt.figure(num=column, figsize=(5, 5), dpi=80)
+        self.__FIG.suptitle(title, fontsize = 20)
         self.__CANVAS = FigureCanvasTkAgg(self.__FIG, master = self.__WINDOW)
 
         self.__MAX_DATA_RANGE = maxDataRange
@@ -20,7 +22,11 @@ class figurePlt():
         self.scalePlt()
 
         self.__CANVAS.draw()
-        self.__CANVAS.get_tk_widget().grid(row = 5, column = 0, columnspan = 7, pady = (15, 15), padx = (25, 25))
+        if column == 1:
+            self.__CANVAS.get_tk_widget().grid(row = 0, column = 0, columnspan = 6)
+        elif column == 2:
+            self.__CANVAS.get_tk_widget().grid(row = 0, column = 6, columnspan = 6)
+            
 
     def clearPlt(self):
         plt.clf()
