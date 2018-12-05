@@ -8,11 +8,6 @@ class Hopfield():
         self.dataLen = len(data[0])
 
         self.setWeight()
-        # print('-------------------')
-        # print(self.weight)
-        # print(self.rowSum)
-        # print('-------------------')
-        # self.calcu()
 
     def calcu(self, inputData):
         output = self.setOutput(inputData)
