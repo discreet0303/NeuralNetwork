@@ -5,11 +5,14 @@
 #     UiLayout.UiLayout()
 
 # Hw2
-from src.nerual.MultiPerceptron import MultiPerceptron
-from src.gui.UiLayoutV2 import UiLayoutV2
+# from src.nerual.MultiPerceptron import MultiPerceptron
+# from src.gui.UiLayoutV2 import UiLayoutV2
+
+# if __name__ == "__main__":
+#     ui = UiLayoutV2()
+
+# Hw3
+from src.gui.UiLayoutHw3 import UiLayoutHw3
 
 if __name__ == "__main__":
-    ui = UiLayoutV2()
-
-    # pe = MultiPerceptron()
-    # pe.startTraining()
+    ui = UiLayoutHw3()
