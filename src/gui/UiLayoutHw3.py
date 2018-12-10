@@ -14,6 +14,7 @@ class UiLayoutHw3():
 
 	def __init__(self):
 		self.window = tk.Tk()
+		self.window.title("Neural Network HW_03")
 		self.window.resizable(0, 0)
 
 		self.rowNum = 12
@@ -41,7 +42,7 @@ class UiLayoutHw3():
 			self.showText_lb_var.set('請先點選開始訓練')
 		else:
 			if self.endCondition_tf.get() == '':
-				self.showText_lb_var.set('請先點選開始訓練')
+				self.showText_lb_var.set('請輸入最大收斂次數')
 			else:
 				dataTest, dataTestCount = self.files.getHopfieldData(self.fileName + '_Testing.txt')
 
@@ -75,7 +76,7 @@ class UiLayoutHw3():
 			self.showText_lb_var.set('請先點選開始訓練')
 		else:
 			if self.endCondition_tf.get() == '':
-				self.showText_lb_var.set('請先點選開始訓練')
+				self.showText_lb_var.set('請輸入最大收斂次數')
 			else:
 				inputdata = []
 				for canvasBt in self.canvas.find_withtag("all"):
@@ -202,7 +203,7 @@ class UiLayoutHw3():
 	def sel(self):
 		fileNameArr = ['Basic', 'Bonus']
 		self.fileName = fileNameArr[self.rb.get() - 1]
-		if self.rb.get() == 0:
+		if self.rb.get() == 1:
 			self.rowNum = 12
 			self.colNum = 9
 		else:
