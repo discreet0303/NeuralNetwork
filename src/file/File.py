@@ -5,6 +5,38 @@ class File():
     def __init__(self):
         self.__BASE_DIR_PATH = os.getcwd()
         self.__DATASET_DIR_PATH = os.path.join(self.__BASE_DIR_PATH, 'dataSet')
+    
+    def getHopfieldData(self, fileName):
+        filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
+
+        with open(filePath, 'r') as dataSet:
+            originData = dataSet.read().split('\n')
+
+        dataArr = []
+        arr = []
+        lineCount = 0
+        dataCount = 1
+        if fileName == 'Bonus_Training.txt':
+            rowNum = 10
+        else: 
+            rowNum = 12
+
+        for data in originData:
+            if len(data) > 0:
+                for item in data:
+                    if item == ' ':
+                        arr.append(-1)
+                    elif item == '1':
+                        arr.append(1)
+            elif len(data) == 0:
+                dataArr.append(arr)
+                arr = []
+                dataCount += 1
+
+        dataArr.append(arr)
+                
+        return dataArr, dataCount
+        
 
     def getFileContentV2(self, fileName):
         filePath = os.path.join(self.__DATASET_DIR_PATH, fileName)
